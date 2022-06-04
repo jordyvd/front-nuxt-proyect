@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Menu :home="true"/>
+    <Menu :home="true" />
     <section class="banner_part">
       <div class="container">
         <div class="row align-items-center">
@@ -10,7 +10,7 @@
                 <div class="banner_text">
                   <div class="banner_text_iner">
                     <h5 class="text-white">Motortect</h5>
-                    <h1 class="text-white">repuestos para linea pesada</h1>
+                    <h1 class="text-white">repuestos para {{ api }} pesada</h1>
                     <a href="#" class="btn_1">shop now</a>
                   </div>
                 </div>
@@ -27,40 +27,36 @@
           <div class="col-lg-3 col-sm-6">
             <div class="single_shopping_details">
               <img src="/delivery.webp" alt="" />
-              <h4>Free shipping</h4>
+              <h4>Informacion</h4>
               <p>
-                Divided face for bearing the divide unto seed winged divided
-                light Forth.
+               Detalle del servicio
               </p>
             </div>
           </div>
           <div class="col-lg-3 col-sm-6">
             <div class="single_shopping_details">
               <img src="/reloj.webp" alt="" />
-              <h4>Free shipping</h4>
+              <h4>Informacion</h4>
               <p>
-                Divided face for bearing the divide unto seed winged divided
-                light Forth.
+               Detalle del servicio
               </p>
             </div>
           </div>
           <div class="col-lg-3 col-sm-6">
             <div class="single_shopping_details">
               <img src="/list.webp" alt="" />
-              <h4>Free shipping</h4>
+              <h4>Informacion</h4>
               <p>
-                Divided face for bearing the divide unto seed winged divided
-                light Forth.
+               Detalle del servicio
               </p>
             </div>
           </div>
           <div class="col-lg-3 col-sm-6">
             <div class="single_shopping_details">
               <img src="/tarjeta.webp" alt="" />
-              <h4>Free shipping</h4>
+              <h4>Informacion</h4>
               <p>
-                Divided face for bearing the divide unto seed winged divided
-                light Forth.
+                Detalle del servicio
               </p>
             </div>
           </div>
@@ -71,8 +67,8 @@
       <div class="row">
         <div class="col-lg-12">
           <div class="section-title">
-            <span>Latest News</span>
-            <h2>Fashion New Trends</h2>
+            <span>Algunas marcas para ti</span>
+            <h2>Marcas Recomendadas</h2>
           </div>
         </div>
       </div>
@@ -177,7 +173,8 @@
             With supporting text below as a natural lead-in to additional
             content.
           </p>
-          <a href="#" class="btn btn-banner">Go somewhere</a>
+          <!-- <a href="#" class="btn btn-banner">Go somewhere</a> -->
+          <NuxtLink to="marcas" class="btn btn-banner"> Go somewhere </NuxtLink>
         </div>
       </div>
     </section>
@@ -190,10 +187,16 @@ import Menu from "~/components/Menu.vue";
 export default {
   components: { Menu },
   data() {
-    return {};
+    return {
+      api: process.env.NEXT_PUBLIC_API_BACKEND,
+    };
   },
   created() {
-    
+    console.log("sa", process.env.NEXT_PUBLIC_API_BACKEND);
+    // alert(process.env.API_MOTORTECT_BACK)
+  },
+  mounted() {
+    this.api = process.env.NEXT_PUBLIC_API_BACKEND;
   },
 };
 </script>

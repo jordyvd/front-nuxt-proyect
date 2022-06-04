@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Menu :home="false"/>
+    <Menu :home="false" />
     <section class="cart_area section_padding">
       <div class="container">
         <div class="cart_inner">
@@ -51,12 +51,12 @@
                         <i class="fas fa-plus"></i
                       ></span>
                     </div> -->
-                      <b-form-spinbutton
-                       @change="countCart()"
-                        id="sb-inline"
-                        v-model="item.cantidad"
-                        inline
-                      ></b-form-spinbutton>
+                    <b-form-spinbutton
+                      @change="countCart()"
+                      id="sb-inline"
+                      v-model="item.cantidad"
+                      inline
+                    ></b-form-spinbutton>
                   </td>
                   <td>
                     <h5>${{ item.precio * item.cantidad }}</h5>
@@ -82,7 +82,7 @@
                     <div class="shipping_box">
                       <ul class="list">
                         <li>
-                          Lima: $5.00
+                          Lima: S/.0.00
                           <input
                             type="radio"
                             aria-label="Radio button for following text input"
@@ -97,6 +97,16 @@
                         </li>
                       </ul>
                     </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    <h5>Total</h5>
+                  </td>
+                  <td>
+                    <h5>$ {{ subTotal }}</h5>
                   </td>
                 </tr>
               </tbody>
@@ -144,9 +154,9 @@ export default {
         }
       }
     },
-    countCart(){
+    countCart() {
       this.$nuxt.$emit("count-cantidad", null);
-    }
+    },
   },
   computed: {
     subTotal() {

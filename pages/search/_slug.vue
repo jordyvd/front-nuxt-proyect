@@ -1,12 +1,7 @@
 <template>
   <div>
-    <Menu :home="false"/>
-     <b-overlay
-      :show="loading"
-      rounded
-      opacity="0.6"
-      spinner-small
-      spinner-variant="primary">
+    <Menu :home="false" />
+    <loading v-if="loading" />
     <section class="cat_product_area section_padding border_top">
       <div class="container">
         <div class="row">
@@ -17,14 +12,20 @@
             </b-col>
             <!-- *** fin spinner *** -->
             <div class="left_sidebar_area" v-else>
-              <aside class="left_widgets p_filter_widgets sidebar_box_shadow">
+              <aside class="left_widgets p_filter_widgets">
                 <div class="l_w_title">
                   <h3>Marcas encontradas</h3>
                 </div>
                 <div class="widgets_inner">
-                  <ul class="list">
+                  <small
+                    v-if="marcas.length == 0"
+                    class="text-danger flex-center"
+                  >
+                    x marcas no encontradas</small
+                  >
+                  <ul class="list" v-else>
                     <p
-                      class="text-marca pointer"
+                      class="text-marca pointer text-bold text-uppercase"
                       v-if="marca != null"
                       @click="resetGet()"
                     >
@@ -33,10 +34,10 @@
                       >
                     </p>
                     <li v-for="(item, index) in marcas" :key="index">
-                      <div v-if="item.delete == 0">
+                      <div>
                         <a
                           @click.prevent="selectMarca(item)"
-                          class="text-marca pointer"
+                          class="text-marca pointer text-bold text-uppercase"
                         >
                           {{ item.marca }}
                         </a>
@@ -96,12 +97,29 @@
                       $route.params.slug
                     }}</b-alert>
                   </div>
-                  <div class="product_top_bar_iner product_bar_item d-flex">
+                  <!-- **** sin resultados **** -->
+                  <div v-if="result.length == 0 && !loading" class="w-100">
+                    <div class="flex-center">
+                      <img src="/no-results.png" width="200" alt="" />
+                    </div>
+                    <div class="flex-center">
+                      <b class="text-dark">NO SE ENCONTRARON RESULTADOS</b>
+                    </div>
+                    <small class="flex-center"
+                      >Verifique si escribio correctamente lo que buscaba, o
+                      intente con otros parametros</small
+                    >
+                  </div>
+                  <!-- **** fin sin resultados **** -->
+                  <div
+                    class="product_top_bar_iner product_bar_item d-flex"
+                    v-else
+                  >
                     <div class="product_bar_single">
-                      <select class="wide form-control">
+                      <select class="wide form-control" v-model="orderBy">
                         <option value="" hidden>Ordenar por</option>
-                        <option value="1">Precios mas bajos</option>
-                        <option value="2">Precios mas altos</option>
+                        <option value="0">Precios mas bajos</option>
+                        <option value="1">Precios mas altos</option>
                       </select>
                     </div>
                     <!-- <div class="product_bar_single">
@@ -121,7 +139,9 @@
                 :key="index"
               >
                 <div class="single_category_product">
-                   <b-badge variant="primary" class="view-marca"> {{item.marca}} </b-badge>
+                  <b-badge variant="primary" class="view-marca">
+                    {{ item.marca }}
+                  </b-badge>
                   <div class="single_category_img">
                     <img :src="url + item.url" class="img-carta" />
                     <div class="category_social_icon">
@@ -155,8 +175,7 @@
             </div>
             <Skeleton v-if="loadingMore" />
             <div class="col-lg-12 text-center">
-              <div v-if="loadingMore"></div>
-              <a @click="getMore()" class="btn_2 cursor" v-else-if="btnMore"
+              <a @click="getMore()" class="btn_2 cursor" v-if="btnMore"
                 >CARGAR MAS</a
               >
               <b-alert show variant="light" v-else>_ _</b-alert>
@@ -185,13 +204,14 @@
         </div>
       </div>
     </b-modal>
-    </b-overlay>
   </div>
 </template>
 <script>
 import axios from "axios";
 import Skeleton from "~/components/Skeleton.vue";
+import Loading from "~/components/Loading.vue";
 export default {
+  components: { Loading },
   data() {
     return {
       modalAdd: false,
@@ -212,6 +232,10 @@ export default {
       btnMore: true,
       spinnerMarca: false,
       webService: "http://127.0.0.1:8000",
+      orderBy: null,
+      pagination: {
+        count: 0,
+      }
     };
   },
   created() {
@@ -235,23 +259,26 @@ export default {
         search: this.search,
         marca_id: this.marca_id,
         page: 1,
+        order_by: this.orderBy
       };
       axios
         .post(this.webService + "/api/products/search", params)
         .then((res) => {
           this.result = res.data.products;
           this.marcas = res.data.marcas;
+          this.pagination.cantidad = res.data.count;
+          console.log(res.data.products.cantidad)
           this.result.forEach((element) => {
             this.cart.forEach((cart) => {
               if (element.id == cart.id) {
                 element.agregado = true;
                 element.cantidad = cart.cantidad;
-              }else{
+              } else {
                 element.cantidad = 0;
               }
             });
           });
-          if (this.result.length == res.data.count) {
+          if (this.result.length == this.pagination.cantidad) {
             this.btnMore = false;
           } else {
             this.btnMore = true;
@@ -267,6 +294,7 @@ export default {
         search: this.search,
         marca_id: this.marca_id,
         page: this.page,
+        order_by: this.orderBy
       };
       axios
         .post(this.webService + "/api/products/get-more-search", params)
@@ -283,7 +311,7 @@ export default {
               }
             });
           });
-          if (this.result.length == res.data.count) {
+          if (this.result.length == this.pagination.cantidad) {
             this.btnMore = false;
           } else {
             this.btnMore = true;
@@ -306,7 +334,7 @@ export default {
         }
       });
       if (count < 1) {
-        this.pushCart();
+        //   this.pushCart();
       } else {
         this.InsertLocalStorage();
       }
@@ -347,7 +375,7 @@ export default {
     },
     selectMarca(item) {
       this.marca = item.marca;
-      this.marca_id = item.marcas_id;
+      this.marca_id = item.id;
       this.getResult();
     },
     resetGet() {

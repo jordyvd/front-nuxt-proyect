@@ -1,5 +1,10 @@
+const config = require('./config.js');
+
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
+  env: {
+    config
+  },
   head: {
     title: 'proyecto-nuxt',
     htmlAttrs: {
@@ -16,8 +21,8 @@ export default {
       { rel: 'stylesheet', href: 'https://preview.colorlib.com/theme/winter/css/A.style.css.pagespeed.cf.F6SlnAxQ2U.css' },
       { rel: 'stylesheet', href: 'https://use.fontawesome.com/releases/v5.8.2/css/all.css' },
     ],
-    script:[
-       {src: 'js/pace.min.js'}
+    script: [
+      { src: 'js/pace.min.js' }
     ],
   },
 
@@ -27,7 +32,7 @@ export default {
     '@/assets/css/responsive.css',
     '@/assets/css/pace.css',
   ],
-  script:[
+  script: [
     '@/assets/js/script.js',
     '@/assets/js/pace.min.js',
   ],
@@ -52,7 +57,7 @@ export default {
     'bootstrap-vue/nuxt',
     '@nuxtjs/toast',
     'nuxt-sweetalert2',
-  //  '@nuxtjs/axios',
+    //  '@nuxtjs/axios',
   ],
   nuxtValidate: {
     lang: 'es',

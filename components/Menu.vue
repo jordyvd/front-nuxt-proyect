@@ -8,13 +8,12 @@
         <div class="row align-items-center justify-content-center">
           <div class="col-lg-11">
             <nav class="navbar navbar-expand-lg navbar-light">
-              <a class="navbar-brand" to="/index">
+              <a class="navbar-brand text-logo-menu" to="/index">
                 <!-- <img
                   src="data:image/webp;base64,UklGRngBAABXRUJQVlA4TGwBAAAvUQAFEH8gFkymnf+RwqCM/0QkdBzIrbXtbZuXOZPoJRnawKidQy+idvYE5AaKfVrAaQByA6JzpTQB3bkEmDMfB8QNIvo/AQptrA6U4JaMDDrSBYdtbpNYkpPNreTwPFyXZpQZRR1BSh4NY3WQxJiyHMhpRFWhYxhQ1y8oakoxIQdTI6hqTu4FPS14veSR7oCe1F7zRvLYWbSO+KgZmFqR8luBm/azNkBFHte0bA61/MJzbV35/V/2uwf4Ig9oWXS0/bg+3KcT8EEz6urSlBbsWGsyHrcZadu3MOcdm8OAghwe+hi4KY0oepiSlnymOnHbPA/Iq0vTx+aL5FHxaEiacUZxwA/MGNr41vwm/CTn8JtqYgOWpI5YUEzMgVvZQC6GT5zrf78jOJcBpGMwcNNSNuATHEprXEW44FBa8F5XXwIseC7N6URpQ1/3/F/w05a6NOEwirGhr/01cK6AJWVpQDOKruhJn5YcZvwA"
                   alt="logo"
                 /> -->
-                Logo
-                {{this.user_name}}
+                Motortect
               </a>
               <button
                 class="navbar-toggler"

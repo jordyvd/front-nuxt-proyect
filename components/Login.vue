@@ -88,7 +88,7 @@ export default {
                 variant: "primary",
                 solid: true,
               });
-              this.saveLogin(res.data.user);
+              this.saveLogin(res.data.usuario);
             }
           })
           .catch((error) => {
