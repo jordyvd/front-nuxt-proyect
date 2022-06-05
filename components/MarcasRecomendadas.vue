@@ -4,7 +4,7 @@
       <div class="col-lg-12">
         <div class="section-title">
           <span>POPULARES</span><br />
-          <h2 class="border-b-text">PRODUCTOS RECOMENDADOS</h2>
+          <h2 class="border-b-text">MARCAS RECOMENDADAS</h2>
         </div>
       </div>
     </div>
@@ -25,10 +25,10 @@
               >
                 <div class="single_category_product">
                   <b-badge variant="primary" class="view-marca bg-secondary">
-                    {{ item.marca }}
+                    PRODUCTOS: {{ item.cantidad }}
                   </b-badge>
                   <div class="single_category_img">
-                    <img :src="urlImg + item.url" class="img-carta" />
+                    <img :src="urlImg + item.url" class="img-carta bg-transparent" />
                     <div class="category_social_icon">
                       <ul>
                         <li>
@@ -49,9 +49,8 @@
                     </div>
                     <div class="category_product_text">
                       <NuxtLink :to="'/product/' + item.id">
-                        <h5 class="text-center">{{ item.descripcion }}</h5>
+                        <h5 class="text-center text-uppercase">{{ item.procedencia }}</h5>
                       </NuxtLink>
-                      <p>${{ item.precio }}</p>
                     </div>
                   </div>
                 </div>
@@ -74,7 +73,7 @@ import axios from "axios";
 export default {
   data() {
     return {
-      urlImg: process.env.BASE_URL + "/images/productos/",
+      urlImg: process.env.BASE_URL + "/images/marcas/",
       modalCantidad: false,
       cantidad: 0,
       recomendados: [],
@@ -87,7 +86,7 @@ export default {
   methods: {
     getRecomendados() {
       axios
-        .post(process.env.BASE_URL + "/api/products/get-recomendados")
+        .get(process.env.BASE_URL + "/api/marca/get-recomendadas")
         .then((res) => {
           this.recomendados = res.data;
         });

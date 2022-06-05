@@ -177,11 +177,11 @@
               class="border-bottom"
             >
               <div class="row my-2">
-                <div class="col-lg-3 bg-white ">
+                <div class="col-lg-3 bg-white flex-center">
                   <b-img
                     :src="item.img"
-                    style="margin-top: 20%; object-fit: contain;"
-                    alt=""
+                    style="object-fit: contain;"
+                    :alt="item.descripcion"
                   />
                 </div>
                 <div class="col-lg-9">

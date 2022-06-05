@@ -9,8 +9,8 @@
               <div class="single_banner_slider">
                 <div class="banner_text" style="height: 90vh;">
                   <div class="banner_text_iner">
-                    <h5 class="text-white">Motortect</h5>
-                    <h1 class="text-white">repuestos para {{ api }} pesada</h1>
+                    <h5 class="text-white">ventas de repuestos</h5>
+                    <h1 class="text-white">camiones y buses</h1>
                     <a href="#" class="btn_1">productos</a>
                   </div>
                 </div>
@@ -55,7 +55,7 @@
         </div>
       </div>
     </section>
-    <Recomendados />
+    <marcas-recomendadas />
     <!-- <div class="container">
       <div class="row">
         <div class="col-lg-12">
@@ -88,9 +88,10 @@
 </template>
 
 <script>
+import MarcasRecomendadas from '~/components/MarcasRecomendadas.vue';
 import Menu from "~/components/Menu.vue";
 export default {
-  components: { Menu },
+  components: { Menu, MarcasRecomendadas },
   data() {
     return {
       api: process.env.NEXT_PUBLIC_API_BACKEND,
