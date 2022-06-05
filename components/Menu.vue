@@ -177,12 +177,10 @@
               class="border-bottom"
             >
               <div class="row my-2">
-                <div class="col-lg-3">
-                  <img
+                <div class="col-lg-3 bg-white ">
+                  <b-img
                     :src="item.img"
-                    class="p-2"
-                    style="margin-top: 20%"
-                    width="50px"
+                    style="margin-top: 20%; object-fit: contain;"
                     alt=""
                   />
                 </div>

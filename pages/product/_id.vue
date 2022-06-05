@@ -19,7 +19,7 @@
           <div class="col-lg-5">
             <div class="product_slider_img">
               <div id="vertical">
-                <div data-thumb="img/product_details/prodect_details_1.png">
+                <div class="img-details-content">
                   <img :src="urlImg + product.url" />
                 </div>
               </div>

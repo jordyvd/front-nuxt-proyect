@@ -1,5 +1,5 @@
 <template>
-  <b-modal v-model="modal" centered hide-footer title="Cantidad">
+  <b-modal v-model="modal" centered hide-footer title="Cantidad" title-class="color-system">
     <div class="form-row text-center">
       <div class="col-12">
         <form @submit.prevent="agregar()">
@@ -10,7 +10,7 @@
 
           <button
             type="submit"
-            class="btn btn-primary my-2"
+            class="btn btn-primary my-2 third-bg-color"
             :disabled="cantidad < 1"
           >
             <i class="fas fa-shopping-bag"></i> Agregar

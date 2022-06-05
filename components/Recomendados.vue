@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-lg-12">
         <div class="section-title">
-          <span>MOTORTEC</span><br>
+          <span>MOTORTEC</span><br />
           <h2 class="border-b-text">PRODUCTOS RECOMENDADOS</h2>
         </div>
       </div>
@@ -15,12 +15,7 @@
             <div class="row">
               <div class="col-lg-12">
                 <div
-                  class="
-                    product_top_bar
-                    d-flex
-                    justify-content-between
-                    align-items-center
-                  "
+                  class="my-2 d-flex justify-content-between align-items-center"
                 ></div>
               </div>
               <div
@@ -66,26 +61,6 @@
         </div>
       </div>
     </section>
-    <!-- <b-modal v-model="modalCantidad" centered hide-footer title="Cantidad">
-      <div class="form-row text-center">
-        <div class="col-12">
-          <input
-            type="number"
-            placeholder="Escribir..."
-            class="form-control input-system"
-            v-model="cantidad"
-          />
-          <button
-            type="submit"
-            class="btn btn-primary my-2"
-            @click="agregar()"
-            :disabled="cantidad < 1"
-          >
-            <i class="fas fa-shopping-bag"></i> Agregar
-          </button>
-        </div>
-      </div>
-    </b-modal> -->
     <modal-agregar
       ref="modalAgregar"
       :modal="modalCantidad"
@@ -98,12 +73,12 @@
 import axios from "axios";
 export default {
   data() {
-    return { 
-      urlImg: process.env.BASE_URL+'/images/productos/',
+    return {
+      urlImg: process.env.BASE_URL + "/images/productos/",
       modalCantidad: false,
       cantidad: 0,
       recomendados: [],
-      item: {},    
+      item: {},
     };
   },
   created() {

@@ -3,6 +3,7 @@
   --main-color-rgba: #121212c4;
   --secondary-color: #151E21;
   --secondary-color-rgba: #151E21c4;
+  --third-color: #2f7dfc;
 }
 
 .fade-enter-active,
@@ -432,4 +433,20 @@ body{
 }
 .color-system{
   color:white!important;
+}
+.img-details-content{
+  display: flex;
+  justify-content: center;
+  background: white;
+}
+.b-form-spinbutton{
+  background: transparent!important;
+  color: white!important;
+}
+.third-bg-color{
+  background: var(--third-color)!important;
+  color: white!important;
+}
+.b-form-spinbutton .btn{
+  color: white!important;
 }
