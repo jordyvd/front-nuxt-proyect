@@ -28,28 +28,15 @@
                     PRODUCTOS: {{ item.cantidad }}
                   </b-badge>
                   <div class="single_category_img">
-                    <img :src="urlImg + item.url" class="img-carta bg-transparent border-system"/>
-                    <div class="category_social_icon">
-                      <ul>
-                        <li>
-                          <a
-                            class="text-white cursor bg-secondary"
-                            @click="like()"
-                            ><i class="fas fa-heart"></i
-                          ></a>
-                        </li>
-                        <li>
-                          <a
-                            class="text-white cursor bg-secondary"
-                            @click="openModalCantidad(item)"
-                            ><i class="fas fa-shopping-bag"></i
-                          ></a>
-                        </li>
-                      </ul>
-                    </div>
+                    <img
+                      :src="urlImg + item.url"
+                      class="img-carta bg-transparent border-system"
+                    />
                     <div class="category_product_text">
-                      <NuxtLink :to="'/product/' + item.id">
-                        <h5 class="text-center text-uppercase">{{ item.procedencia }}</h5>
+                      <NuxtLink :to="'/search/' + item.nombre">
+                        <h5 class="text-center text-uppercase">
+                          {{ item.nombre }}
+                        </h5>
                       </NuxtLink>
                     </div>
                   </div>
