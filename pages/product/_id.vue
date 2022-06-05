@@ -4,12 +4,12 @@
 
     <loading v-if="skeleton" />
     <b-container v-if="skeleton" class="section_padding">
-      <b-row>
+      <b-row style="height: 50vh">
         <b-col>
-          <b-skeleton-img height="50vh"/>
+          <b-skeleton-img height="50vh" />
         </b-col>
         <b-col>
-          <b-skeleton-img/>
+          <b-skeleton-img height="50vh" />
         </b-col>
       </b-row>
     </b-container>
@@ -20,14 +20,14 @@
             <div class="product_slider_img">
               <div id="vertical">
                 <div data-thumb="img/product_details/prodect_details_1.png">
-                  <img :src="url + product.url" />
+                  <img :src="urlImg + product.url" />
                 </div>
               </div>
             </div>
           </div>
           <div class="col-lg-5 offset-lg-1">
             <div class="s_product_text">
-              <h3>
+              <h3 class="color-system">
                 {{
                   product.descripcion != null
                     ? product.descripcion.length > 25
@@ -36,39 +36,42 @@
                     : ""
                 }}
               </h3>
-              <h2>S/. {{ product.precio_venta }}</h2>
+              <h2 class="color-system">S/. {{ product.precio_venta }}</h2>
               <ul class="list">
                 <li>
                   <a class="active" href="#">
-                    <span>Marca</span> : {{ product.marca }}</a
+                    <span class="color-system">Marca</span> : {{ product.marca }}</a
                   >
                 </li>
                 <li>
-                  <a href="#"> <span>Availibility</span> : In Stock</a>
+                  <a class="color-system"> <span>Stock</span> : {{ product.stock }}</a>
+                </li>
+                <li>
+                  <a class="color-system"> <span>Código</span> : {{ product.codigo }}</a>
+                </li>
+                <li>
+                  <a 
+                    class="color-system"
+                    :class="
+                      product.codigo_interno == null
+                        ? 'text-danger!important'
+                        : 'decoration-none'
+                    "
+                    style="text-decoration: none"
+                  >
+                    <span>C. Interno</span> :
+                    {{
+                      product.codigo_interno != null
+                        ? product.codigo_interno
+                        : "sin código"
+                    }}</a
+                  >
                 </li>
               </ul>
               <p>
                 {{ product.descripcion }}
               </p>
               <div class="card_area">
-                <!-- <div class="product_count d-inline-block"> -->
-                <!-- <span
-                      class="inumber-decrement cursor"
-                      @click="cantidad = cantidad - 1"
-                    >
-                      <i class="fas fa-minus"></i
-                    ></span>
-                    <input
-                      class="input-number"
-                      type="text"
-                      v-model="cantidad"
-                      min="0"
-                    />
-                    <span
-                      class="number-increment cursor"
-                      @click="cantidad = cantidad + 1"
-                      ><i class="fas fa-plus"></i
-                    ></span> -->
                 <b-form-spinbutton
                   id="sb-inline"
                   v-model="cantidad"
@@ -76,7 +79,7 @@
                 ></b-form-spinbutton>
                 <!-- </div> -->
                 <div class="add_to_cart">
-                  <a href="" @click.prevent="addProduct()" class="btn_3 cursor"
+                  <a @click.prevent="addProduct()" class="btn_3 cursor"
                     >agregar</a
                   >
                   <a href="#" class="like_us"><i class="fas fa-heart"></i> </a>
@@ -110,12 +113,11 @@ export default {
   data() {
     return {
       cantidad: 0,
-      webService: "http://127.0.0.1:8000",
       product: {},
-      url: "http://127.0.0.1:8000/images/productos/",
       update: 0,
       skeleton: true,
       cart: [],
+      urlImg: process.env.BASE_URL+'/images/productos/',
     };
   },
   created() {
@@ -129,7 +131,7 @@ export default {
         id: this.$route.params.id,
       };
       axios
-        .post(this.webService + "/api/products/details", params)
+        .post(process.env.BASE_URL + "/api/products/details", params)
         .then((res) => {
           this.product = res.data[0];
           this.update = ++this.update;

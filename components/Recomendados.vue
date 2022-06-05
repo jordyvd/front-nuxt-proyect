@@ -3,12 +3,12 @@
     <div class="row">
       <div class="col-lg-12">
         <div class="section-title">
-          <span>Productos</span>
-          <h2>Recomendados</h2>
+          <span>MOTORTEC</span><br>
+          <h2 class="border-b-text">PRODUCTOS RECOMENDADOS</h2>
         </div>
       </div>
     </div>
-    <section class="cat_product_area border_top">
+    <section class="cat_product_area">
       <div class="container">
         <div class="row">
           <div class="col-lg-12">
@@ -29,18 +29,23 @@
                 :key="index"
               >
                 <div class="single_category_product">
+                  <b-badge variant="primary" class="view-marca bg-secondary">
+                    {{ item.marca }}
+                  </b-badge>
                   <div class="single_category_img">
-                    <img :src="url + item.url" class="img-carta" />
+                    <img :src="urlImg + item.url" class="img-carta" />
                     <div class="category_social_icon">
                       <ul>
                         <li>
-                          <a class="text-white cursor" @click="like()"
+                          <a
+                            class="text-white cursor bg-secondary"
+                            @click="like()"
                             ><i class="fas fa-heart"></i
                           ></a>
                         </li>
                         <li>
                           <a
-                            class="text-white cursor"
+                            class="text-white cursor bg-secondary"
                             @click="openModalCantidad(item)"
                             ><i class="fas fa-shopping-bag"></i
                           ></a>
@@ -93,14 +98,12 @@
 import axios from "axios";
 export default {
   data() {
-    return {
-      img: "https://siempreauto.com/wp-content/uploads/sites/9/2021/08/damper-2118130_1280.jpg?quality=60&strip=all&w=1200",
+    return { 
+      urlImg: process.env.BASE_URL+'/images/productos/',
       modalCantidad: false,
       cantidad: 0,
-      webService: "http://127.0.0.1:8000",
       recomendados: [],
-      url: "http://127.0.0.1:8000/images/productos/",
-      item: {},
+      item: {},    
     };
   },
   created() {
@@ -109,7 +112,7 @@ export default {
   methods: {
     getRecomendados() {
       axios
-        .post(this.webService + "/api/products/get-recomendados")
+        .post(process.env.BASE_URL + "/api/products/get-recomendados")
         .then((res) => {
           this.recomendados = res.data;
         });

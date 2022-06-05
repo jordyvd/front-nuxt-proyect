@@ -51,7 +51,6 @@ export default {
   mixins:[FunctionG],
   data() {
     return {
-      url: "http://127.0.0.1:8000",
       ruc: "8887778887",
       password: "12345678955a",
       user:{},
@@ -80,7 +79,7 @@ export default {
       } else {
         const params = { ruc: this.ruc, password: this.password };
         axios
-          .post(this.url + "/api/auth/login", params)
+          .post(process.env.BASE_URL + "/api/auth/login", params)
           .then((res) => {
             if (res.data.success) {
               this.$bvToast.toast("Bienvenido(a) "+res.data.usuario.name, {

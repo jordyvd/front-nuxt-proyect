@@ -9,10 +9,6 @@
           <div class="col-lg-11">
             <nav class="navbar navbar-expand-lg navbar-light">
               <a class="navbar-brand text-logo-menu" to="/index">
-                <!-- <img
-                  src="data:image/webp;base64,UklGRngBAABXRUJQVlA4TGwBAAAvUQAFEH8gFkymnf+RwqCM/0QkdBzIrbXtbZuXOZPoJRnawKidQy+idvYE5AaKfVrAaQByA6JzpTQB3bkEmDMfB8QNIvo/AQptrA6U4JaMDDrSBYdtbpNYkpPNreTwPFyXZpQZRR1BSh4NY3WQxJiyHMhpRFWhYxhQ1y8oakoxIQdTI6hqTu4FPS14veSR7oCe1F7zRvLYWbSO+KgZmFqR8luBm/azNkBFHte0bA61/MJzbV35/V/2uwf4Ig9oWXS0/bg+3KcT8EEz6urSlBbsWGsyHrcZadu3MOcdm8OAghwe+hi4KY0oepiSlnymOnHbPA/Iq0vTx+aL5FHxaEiacUZxwA/MGNr41vwm/CTn8JtqYgOWpI5YUEzMgVvZQC6GT5zrf78jOJcBpGMwcNNSNuATHEprXEW44FBa8F5XXwIseC7N6URpQ1/3/F/w05a6NOEwirGhr/01cK6AJWVpQDOKruhJn5YcZvwA"
-                  alt="logo"
-                /> -->
                 Motortect
               </a>
               <button
@@ -32,11 +28,14 @@
               >
                 <ul class="navbar-nav">
                   <li class="nav-item">
-                    <NuxtLink to="/" class="nav-link"> Inicio </NuxtLink>
+                    <NuxtLink to="/" class="nav-link" :class="colorText">
+                      Inicio
+                    </NuxtLink>
                   </li>
                   <li class="nav-item dropdown">
                     <a
                       class="nav-link dropdown-toggle cursor"
+                      :class="colorText"
                       id="navbarDropdown_1"
                       role="button"
                       data-toggle="dropdown"
@@ -65,6 +64,7 @@
                   <li class="nav-item dropdown">
                     <a
                       class="nav-link dropdown-toggle"
+                      :class="colorText"
                       href="blog.html"
                       id="navbarDropdown_3"
                       role="button"
@@ -90,7 +90,9 @@
                     </div>
                   </li>
                   <li class="nav-item">
-                    <NuxtLink to="/cart" class="nav-link"> compra </NuxtLink>
+                    <NuxtLink to="/cart" class="nav-link" :class="colorText">
+                      compra
+                    </NuxtLink>
                   </li>
                 </ul>
               </div>
@@ -98,7 +100,7 @@
                 <div class="dropdown cart">
                   <a class="dropdown-toggle cursor" @click="showBolso()">
                     <!-- <i class="fas fa-shopping-bag"></i>{{ cantidad }} -->
-                    <i class="fas fa-shopping-bag"></i>
+                    <i class="fas fa-shopping-bag" :class="colorText"></i>
                     <!-- <b-badge variant="primary">{{ cantidad }}</b-badge> -->
                   </a>
                 </div>
@@ -106,7 +108,7 @@
                   id="search_1"
                   class="cursor"
                   @click="formSearch = !formSearch"
-                  ><i class="fas fa-search"></i
+                  ><i class="fas fa-search" :class="colorText"></i
                 ></a>
               </div>
             </nav>
@@ -114,7 +116,7 @@
         </div>
       </div>
       <transition name="fade">
-        <div class="search_input" id="search_input_box" v-if="formSearch">
+        <div class="search_input" style="border:1px solid white" id="search_input_box" v-if="formSearch">
           <div class="container">
             <form
               class="d-flex justify-content-between search-inner"
@@ -143,36 +145,77 @@
     </header>
     <div>
       <!-- ************** BOLSO ************ -->
-      <b-sidebar v-model="modalBolso" backdrop shadow>
-        <div>
-          <div>
-            <b-list-group v-for="(item, index) in cart" :key="index">
-              <b-list-group-item
-                class="
-                  d-flex
-                  justify-content-between
-                  align-items-center
-                  border-0
-                  bg-transparent
-                "
-              >
-                <img :src="item.img" width="40px" alt="" />
-                {{ item.descripcion }}
-                <b-badge variant="primary" pill> {{ item.cantidad }}</b-badge>
-              </b-list-group-item>
-            </b-list-group>
+      <b-sidebar
+        v-model="modalBolso"
+        backdrop
+        shadow
+        header-class="p-0 bg-system"
+        body-class="overflox-x-hidden bg-system"
+      >
+        <template #header>
+          <div class="bg-secondary w-100 mb-2">
+            <b-row>
+              <b-col cols="10">
+                <p class="text-bold" style="font-size: 14px; margin: 5px">
+                  CARRITO
+                </p>
+              </b-col>
+              <b-col cols="2">
+                <i
+                  class="fas fa-times-circle cursor"
+                  @click="modalBolso = false"
+                ></i>
+              </b-col>
+            </b-row>
           </div>
-          <div class="container text-center">
-            <div class="alert border-top border-bottom">
-              SUB TOTAL: S/. {{ subTotal.toFixed(2) }}
+        </template>
+        <div>
+          <div class="bg-secondary cart-sidebar border-top">
+            <div
+              v-for="(item, index) in cart"
+              :key="index"
+              class="border-bottom"
+            >
+              <div class="row my-2">
+                <div class="col-lg-3">
+                  <img
+                    :src="item.img"
+                    class="p-2"
+                    style="margin-top: 20%"
+                    width="50px"
+                    alt=""
+                  />
+                </div>
+                <div class="col-lg-9">
+                  <p style="font-size: 12px; line-height: 1.5">
+                    {{ item.descripcion }} <br />
+                    {{ `S/.${item.precio}` }}
+                  </p>
+                  <b-form-spinbutton
+                    style="margin-top: -6px"
+                    id="sb-inline"
+                    v-model="item.cantidad"
+                    inline
+                  ></b-form-spinbutton>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="container text-center">
-            <NuxtLink to="/cart" class="btn btn-primary rounded-0"
-              ><i class="fas fa-info-circle"></i> Mas detalles</NuxtLink
+          <div class="container text-center my-2 bg-secondary p-2">
+            <NuxtLink to="/cart" class="btn btn-primary"
+              ><i class="fa fa-credit-card"></i> IR A PAGAR S/.
+              {{ subTotal.toFixed(2) }}</NuxtLink
             >
-            <b-button squared variant="primary"
-              ><i class="fas fa-angle-double-right"></i> Continuar</b-button
+          </div>
+          <div class="container text-center my-2 bg-secondary p-2">
+            <b-button
+              variant="light"
+              @click="vaciarCarrito()"
+              class="text-bold"
+              style="font-size: 12px"
+            >
+              <i class="fa fa-trash"></i> <b-icon icon="trash"></b-icon> VACIAR
+              CARRITO</b-button
             >
           </div>
         </div>
@@ -193,9 +236,10 @@
 <script>
 import Registrar from "./Registrar.vue";
 import axios from "axios";
-import FunctionG from './Function';
+import FunctionG from "./Function";
+import Swal from "sweetalert2/dist/sweetalert2.js";
 export default {
-  mixins:[FunctionG],
+  mixins: [FunctionG],
   props: ["home"],
   data() {
     return {
@@ -208,19 +252,19 @@ export default {
       img: "https://siempreauto.com/wp-content/uploads/sites/9/2021/08/damper-2118130_1280.jpg?quality=60&strip=all&w=1200",
       cantidad: 0,
       scroll: false,
-      url:'http://127.0.0.1:8000'
+      url: "http://127.0.0.1:8000",
     };
   },
   created() {
     this.cantidadCart();
     this.$nuxt.$on("count-cantidad", this.cantidadCart);
-    axios.post(this.url + '/api/auth/is-logout').then(res=>{
-       console.log(res.data);
+    axios.post(this.url + "/api/auth/is-logout").then((res) => {
+      console.log(res.data);
     });
   },
   methods: {
-    isLogout(){
-     if (process.client) {
+    isLogout() {
+      if (process.client) {
         let cart = JSON.parse(localStorage.getItem("cart"));
         if (cart === null) {
           this.cart = [];
@@ -291,6 +335,21 @@ export default {
     scrollListener: function (e) {
       this.scroll = window.scrollY > 500;
     },
+    vaciarCarrito() {
+      Swal.fire({
+        title: "¿estas seguro?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "vaciar",
+        cancelButtonText: "cancelar",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire("Deleted!", "Your file has been deleted.", "success");
+        }
+      });
+    },
   },
   mounted: function () {
     window.addEventListener("scroll", this.scrollListener);
@@ -308,6 +367,9 @@ export default {
       return this.cart.reduce((cantidad, item) => {
         return parseInt(cantidad) + parseInt(item.cantidad);
       }, 0);
+    },
+    colorText() {
+      return this.scroll || this.home == false ? "text-white" : "text-white";
     },
   },
 };

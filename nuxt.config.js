@@ -1,9 +1,8 @@
-const config = require('./config.js');
-
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   env: {
-    config
+    BASE_URL: process.env.BASE_URL,
+    BASE_URL_IMG: process.env.BASE_URL_IMG
   },
   head: {
     title: 'proyecto-nuxt',

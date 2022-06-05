@@ -4,12 +4,20 @@
       <div class="col-lg-12">
         <div class="section-title">
           <!-- <span>Recomendaciones</span> -->
-          <h2>Productos Relacionados</h2>
+          <h2 class="border-b-text">PRODUCTOS RELACIONADOS</h2>
         </div>
       </div>
     </div>
     <Skeleton v-if="loading" />
-    <section class="cat_product_area border_top" v-else>
+    <div v-if="result.length == 0 && !loading" class="w-100 my-5">
+      <div class="flex-center">
+        <img src="/no-results.png" width="80" alt="" />
+      </div>
+      <div class="flex-center my-1">
+        <small class="color-system">NO SE ENCONTRARON PRODUCTOS</small>
+      </div>
+    </div>
+    <section class="cat_product_area" v-else>
       <div class="container" v-if="result.length">
         <div class="row">
           <div class="col-lg-12">
@@ -30,11 +38,11 @@
                 :key="index"
               >
                 <div class="single_category_product">
-                  <b-badge variant="primary" class="view-marca">
+                  <b-badge variant="primary" class="view-marca bg-secondary">
                     {{ item.marca }}
                   </b-badge>
                   <div class="single_category_img">
-                    <img :src="url + item.url" alt="" class="img-carta" />
+                    <img :src="urlImg + item.url" alt="" class="img-carta" />
                     <div class="category_social_icon">
                       <ul>
                         <li>
@@ -56,7 +64,7 @@
                         <h5>{{ item.descripcion }}</h5>
                       </NuxtLink>
                       <p>S/. {{ item.precio_venta }}</p>
-                       <b-badge variant="primary" v-if="item.agregado"
+                      <b-badge variant="primary" v-if="item.agregado"
                         ><i class="fas fa-check"></i> agregado({{
                           item.cantidad
                         }})</b-badge
@@ -99,13 +107,12 @@ export default {
   data() {
     return {
       modal: false,
-      webService: "http://127.0.0.1:8000",
       result: [],
       cart: [],
-      url: "http://127.0.0.1:8000/images/productos/",
       item: {},
       cantidad: 0,
-      loading:false,
+      loading: false,
+      urlImg: process.env.BASE_URL+'/images/productos/',
     };
   },
   created() {
@@ -121,7 +128,7 @@ export default {
       this.loading = true;
       const params = { descripcion: this.param };
       axios
-        .post(this.webService + "/api/products/relacionados", params)
+        .post(process.env.BASE_URL + "/api/products/relacionados", params)
         .then((res) => {
           let products = res.data;
           products.forEach((element) => {
@@ -135,7 +142,7 @@ export default {
               }
             });
           });
-         this.loading = false;
+          this.loading = false;
         });
     },
     getCart() {

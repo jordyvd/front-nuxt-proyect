@@ -14,14 +14,14 @@
             <div class="left_sidebar_area" v-else>
               <aside class="left_widgets p_filter_widgets">
                 <div class="l_w_title">
-                  <h3>Marcas encontradas</h3>
+                  <h3 class="bg-secondary text-white">Marcas encontradas</h3>
                 </div>
                 <div class="widgets_inner">
                   <small
                     v-if="marcas.length == 0"
                     class="text-danger flex-center"
                   >
-                    x marcas no encontradas</small
+                    marcas no encontradas</small
                   >
                   <ul class="list" v-else>
                     <p
@@ -29,7 +29,10 @@
                       v-if="marca != null"
                       @click="resetGet()"
                     >
-                      <b-alert show variant="light" class="border"
+                      <b-alert
+                        show
+                        variant="light"
+                        class="border bg-secondary color-system"
                         ><i class="fas fa-trash-alt"></i> {{ marca }}</b-alert
                       >
                     </p>
@@ -37,7 +40,7 @@
                       <div>
                         <a
                           @click.prevent="selectMarca(item)"
-                          class="text-marca pointer text-bold text-uppercase"
+                          class="text-marca pointer text-uppercase text-white"
                         >
                           {{ item.marca }}
                         </a>
@@ -93,19 +96,19 @@
                   "
                 >
                   <div class="single_product_menu product_bar_item d-flex">
-                    <b-alert show variant="light" class="text-search">{{
+                    <span class="text-search color-system border-b-text">{{
                       $route.params.slug
-                    }}</b-alert>
+                    }}</span>
                   </div>
                   <!-- **** sin resultados **** -->
                   <div v-if="result.length == 0 && !loading" class="w-100">
                     <div class="flex-center">
                       <img src="/no-results.png" width="200" alt="" />
                     </div>
-                    <div class="flex-center">
-                      <b class="text-dark">NO SE ENCONTRARON RESULTADOS</b>
+                    <div class="flex-center mt-4">
+                      <b class="color-system">NO SE ENCONTRARON RESULTADOS</b>
                     </div>
-                    <small class="flex-center"
+                    <small class="flex-center color-system"
                       >Verifique si escribio correctamente lo que buscaba, o
                       intente con otros parametros</small
                     >
@@ -115,13 +118,13 @@
                     class="product_top_bar_iner product_bar_item d-flex"
                     v-else
                   >
-                    <div class="product_bar_single">
+                    <!-- <div class="product_bar_single">
                       <select class="wide form-control" v-model="orderBy">
                         <option value="" hidden>Ordenar por</option>
                         <option value="0">Precios mas bajos</option>
                         <option value="1">Precios mas altos</option>
                       </select>
-                    </div>
+                    </div> -->
                     <!-- <div class="product_bar_single">
                       <select class="form-control">
                         <option data-display="Show 12">Show 12</option>
@@ -143,7 +146,7 @@
                     {{ item.marca }}
                   </b-badge>
                   <div class="single_category_img">
-                    <img :src="url + item.url" class="img-carta" />
+                    <img :src="urlImg + item.url" class="img-carta" />
                     <div class="category_social_icon">
                       <ul>
                         <li>
@@ -175,10 +178,13 @@
             </div>
             <Skeleton v-if="loadingMore" />
             <div class="col-lg-12 text-center">
-              <a @click="getMore()" class="btn_2 cursor" v-if="btnMore"
+              <a
+                @click="getMore()"
+                class="btn_2 bg-secondary text-white cursor"
+                v-if="btnMore"
                 >CARGAR MAS</a
               >
-              <b-alert show variant="light" v-else>_ _</b-alert>
+              <b-alert show class="bg-transparent border-0" v-else>_ _</b-alert>
             </div>
           </div>
         </div>
@@ -219,7 +225,6 @@ export default {
       result: [],
       cart: [],
       marcas: [],
-      url: "http://127.0.0.1:8000/images/productos/",
       item: {},
       marca: null,
       marca_id: null,
@@ -231,11 +236,11 @@ export default {
       loadingMore: false,
       btnMore: true,
       spinnerMarca: false,
-      webService: "http://127.0.0.1:8000",
       orderBy: null,
       pagination: {
         count: 0,
-      }
+      },
+      urlImg: process.env.BASE_URL+'/images/productos/',
     };
   },
   created() {
@@ -259,15 +264,15 @@ export default {
         search: this.search,
         marca_id: this.marca_id,
         page: 1,
-        order_by: this.orderBy
+        order_by: this.orderBy,
       };
       axios
-        .post(this.webService + "/api/products/search", params)
+        .post(process.env.BASE_URL + "/api/products/search", params)
         .then((res) => {
           this.result = res.data.products;
           this.marcas = res.data.marcas;
           this.pagination.cantidad = res.data.count;
-          console.log(res.data.products.cantidad)
+          console.log(res.data.products.cantidad);
           this.result.forEach((element) => {
             this.cart.forEach((cart) => {
               if (element.id == cart.id) {
@@ -294,10 +299,10 @@ export default {
         search: this.search,
         marca_id: this.marca_id,
         page: this.page,
-        order_by: this.orderBy
+        order_by: this.orderBy,
       };
       axios
-        .post(this.webService + "/api/products/get-more-search", params)
+        .post(process.env.BASE_URL + "/api/products/get-more-search", params)
         .then((res) => {
           let products = res.data.products;
           products.forEach((element) => {
@@ -394,7 +399,7 @@ export default {
         page: 1,
       };
       axios
-        .post(this.webService + "/api/products/search", params)
+        .post(process.env.BASE_URL + "/api/products/search", params)
         .then((res) => {
           this.result = res.data.products;
           this.marcas = res.data.marcas;
