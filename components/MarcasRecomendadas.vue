@@ -28,7 +28,7 @@
                     PRODUCTOS: {{ item.cantidad }}
                   </b-badge>
                   <div class="single_category_img">
-                    <img :src="urlImg + item.url" class="img-carta bg-transparent" />
+                    <img :src="urlImg + item.url" class="img-carta bg-transparent border-system"/>
                     <div class="category_social_icon">
                       <ul>
                         <li>

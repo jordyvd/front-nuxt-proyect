@@ -450,3 +450,7 @@ body{
 .b-form-spinbutton .btn{
   color: white!important;
 }
+.border-system{
+  border: 1px solid var(--secondary-color)!important;
+  border-radius: 4px!important;
+}
