@@ -5,7 +5,7 @@ export default {
     BASE_URL_IMG: process.env.BASE_URL_IMG
   },
   head: {
-    title: 'proyecto-nuxt',
+    title: 'motortec',
     htmlAttrs: {
       lang: 'en'
     },
@@ -16,7 +16,7 @@ export default {
       { name: 'format-detection', content: 'telephone=no' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'icon', type: 'image/x-icon', href: '/truck.png' },
       { rel: 'stylesheet', href: 'https://preview.colorlib.com/theme/winter/css/A.style.css.pagespeed.cf.F6SlnAxQ2U.css' },
       { rel: 'stylesheet', href: 'https://use.fontawesome.com/releases/v5.8.2/css/all.css' },
     ],
