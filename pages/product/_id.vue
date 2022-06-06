@@ -39,18 +39,29 @@
               <h2 class="color-system">S/. {{ product.precio_venta }}</h2>
               <ul class="list">
                 <li>
-                  <a class="active" href="#">
-                    <span class="color-system">Marca</span> : {{ product.marca }}</a
+                  <NuxtLink :to="'/search/' + product.marca" class="active">
+                    <span class="color-system">Marca</span> :
+                    {{ product.marca }}
+                  </NuxtLink>
+                </li>
+                <li>
+                  <NuxtLink :to="'/search/' + product.procedencia" class="active">
+                    <span class="color-system">Procedencia</span> :
+                    {{ product.procedencia }}
+                  </NuxtLink>
+                </li>
+                <li>
+                  <a class="color-system">
+                    <span>Stock</span> : {{ product.stock }}</a
                   >
                 </li>
                 <li>
-                  <a class="color-system"> <span>Stock</span> : {{ product.stock }}</a>
+                  <a class="color-system">
+                    <span>Código</span> : {{ product.codigo }}</a
+                  >
                 </li>
                 <li>
-                  <a class="color-system"> <span>Código</span> : {{ product.codigo }}</a>
-                </li>
-                <li>
-                  <a 
+                  <a
                     class="color-system"
                     :class="
                       product.codigo_interno == null
@@ -117,7 +128,7 @@ export default {
       update: 0,
       skeleton: true,
       cart: [],
-      urlImg: process.env.BASE_URL+'/images/productos/',
+      urlImg: process.env.BASE_URL + "/images/productos/",
     };
   },
   created() {
