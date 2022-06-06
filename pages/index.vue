@@ -7,11 +7,13 @@
           <div class="col-lg-7">
             <div class="banner_slider">
               <div class="single_banner_slider">
-                <div class="banner_text" style="height: 90vh;">
+                <div class="banner_text" style="height: 90vh">
                   <div class="banner_text_iner">
                     <h5 class="text-white">ventas de repuestos</h5>
                     <h1 class="text-white">camiones y buses</h1>
-                    <a href="#" class="btn_1">productos</a>
+                    <NuxtLink :to="'/search'" class="btn_1">
+                      Productos
+                    </NuxtLink>
                   </div>
                 </div>
               </div>
@@ -73,13 +75,20 @@
     <section class="section-info my-5 border-b-white border-t-white">
       <div class="card container border-0 bg-transparent">
         <div class="card-body bg-transparent">
-          <h2 class="card-title">Special title treatment</h2>
+          <h2 class="card-title">¿Quiénes somos?</h2>
           <p class="card-text">
-            With supporting text below as a natural lead-in to additional
-            content.
+            MOTORTEC, es una compañía dedicada a la importación y distribución a
+            nivel nacional de repuestos para camiones y autobuses en la línea
+            pesada. Estableciendo relaciones comerciales internacionales con
+            fabricantes de equipo original, Ofrecemos para el mercado de
+            reposición la mayor variedad de repuestos; partes de motor,
+            embragues, dirección, partes eléctricas, suspensión, sistema de
+            combustible, entre otros para vehículos Volvo, Scania y
+            Mercedes-Benz, Freightliner Volkswagen, Iveco y Agrale
           </p>
-          <!-- <a href="#" class="btn btn-banner">Go somewhere</a> -->
-          <NuxtLink to="marcas" class="btn btn-banner"> Go somewhere </NuxtLink>
+          <NuxtLink :to="'/search'" class="btn btn-banner">
+            Productos
+          </NuxtLink>
         </div>
       </div>
     </section>
@@ -88,7 +97,7 @@
 </template>
 
 <script>
-import MarcasRecomendadas from '~/components/MarcasRecomendadas.vue';
+import MarcasRecomendadas from "~/components/MarcasRecomendadas.vue";
 import Menu from "~/components/Menu.vue";
 export default {
   components: { Menu, MarcasRecomendadas },
