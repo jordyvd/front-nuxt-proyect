@@ -51,7 +51,12 @@
                       <NuxtLink :to="'/product/' + item.id">
                         <h5 class="text-center">{{ item.descripcion }}</h5>
                       </NuxtLink>
-                      <p>${{ item.precio }}</p>
+                      <p>${{ item.precio_venta }}</p>
+                      <b-badge variant="primary" v-if="item.cantidad > 0"
+                        ><i class="fas fa-check"></i> agregado({{
+                          item.cantidad
+                        }})</b-badge
+                      >
                     </div>
                   </div>
                 </div>
@@ -65,7 +70,10 @@
       ref="modalAgregar"
       :modal="modalCantidad"
       :cantidad="cantidad"
+      :item="item"
+      :key="key"
       @agregar="agregar"
+      @closeModal="closeModal"
     ></modal-agregar>
   </div>
 </template>
@@ -79,23 +87,48 @@ export default {
       cantidad: 0,
       recomendados: [],
       item: {},
+      cart: [],
+      key:0,
     };
   },
   created() {
+    this.getCart();
     this.getRecomendados();
   },
   methods: {
+    getCart() {
+      if (process.client) {
+        let cart = JSON.parse(localStorage.getItem("cart"));
+        if (cart === null) {
+          this.cart = [];
+        } else {
+          this.cart = cart;
+          console.log("card", this.cart);
+        }
+      }
+    },
     getRecomendados() {
       axios
         .post(process.env.BASE_URL + "/api/products/get-recomendados")
         .then((res) => {
           this.recomendados = res.data;
+          this.recomendados.forEach((element) => {
+            this.cart.forEach((cart) => {
+              if (element.id == cart.id) {
+                element.cantidad = cart.cantidad;
+              }
+            });
+          });
         });
     },
     openModalCantidad(item) {
       this.item = item;
       this.cantidad = item.cantidad == null ? 0 : item.cantidad;
+      this.key = this.key+1;
       this.modalCantidad = true;
+    },
+    closeModal(){
+      this.modalCantidad = false;
     },
     agregar(cantidad, cart) {
       this.modalCantidad = false;
@@ -106,11 +139,10 @@ export default {
           count = count + 1;
         }
       });
-      if (count < 1) {
-        this.$refs.modalAgregar.pushCart(this.item);
-      } else {
-        this.$refs.modalAgregar.InsertLocalStorage();
-      }
+      this.cantidad = cantidad;
+      this.modalCantidad = false;
+      this.item.agregado = true;
+      this.item.cantidad = cantidad;
     },
     like() {
       this.$bvToast.toast("es necesario iniciar sesión", {

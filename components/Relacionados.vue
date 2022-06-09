@@ -58,8 +58,8 @@
                       <NuxtLink :to="'/product/' + item.id">
                         <h5>{{ item.descripcion }}</h5>
                       </NuxtLink>
-                      <p>S/. {{ item.precio_venta }}</p>
-                      <b-badge variant="primary" v-if="item.agregado"
+                      <p>${{ item.precio_venta }}</p>
+                      <b-badge variant="primary" v-if="item.cantidad > 0"
                         ><i class="fas fa-check"></i> agregado({{
                           item.cantidad
                         }})</b-badge
@@ -74,25 +74,15 @@
       </div>
       <b-alert v-else>no se encontro resultados</b-alert>
     </section>
-    <b-modal v-model="modal" centered hide-footer title="Cantidad">
-      <div class="form-row text-center">
-        <div class="col-12">
-          <input
-            type="number"
-            placeholder="Escribir..."
-            class="form-control input-system"
-            v-model="cantidad"
-          />
-          <button
-            type="submit"
-            class="btn btn-primary my-2"
-            @click="addProduct()"
-          >
-            <i class="fas fa-shopping-bag"></i> Agregar
-          </button>
-        </div>
-      </div>
-    </b-modal>
+    <modal-agregar
+      ref="modalAgregar"
+      :key="key"
+      :modal="modalAdd"
+      :cantidad="cantidad"
+      :item="item"
+      @agregar="agregar"
+      @closeModal="closeModal"
+    ></modal-agregar>
   </div>
 </template>
 <script>
@@ -101,13 +91,14 @@ export default {
   props: ["param"],
   data() {
     return {
-      modal: false,
+      modalAdd: false,
       result: [],
       cart: [],
       item: {},
       cantidad: 0,
       loading: false,
       urlImg: process.env.BASE_URL + "/images/productos/",
+      key: 0
     };
   },
   created() {
@@ -116,8 +107,13 @@ export default {
   },
   methods: {
     modalCantidad(item) {
-      this.modal = true;
+      this.key = this.key + 1;
       this.item = item;
+      this.cantidad = item.cantidad;
+      this.modalAdd = true;
+    },
+    closeModal(){
+      this.modalAdd = false;
     },
     getRelacionados() {
       this.loading = true;
@@ -132,13 +128,26 @@ export default {
           this.result.forEach((element) => {
             this.cart.forEach((cart) => {
               if (element.id == cart.id) {
-                element.agregado = true;
                 element.cantidad = cart.cantidad;
               }
             });
           });
           this.loading = false;
         });
+    },
+
+    agregar(cantidad, cart) {
+      this.modalAdd = false;
+      let count = 0;
+      cart.forEach((element) => {
+        if (element.id == this.item.id) {
+          element.cantidad = cantidad;
+          count = count + 1;
+        }
+      });
+      this.cantidad = cantidad;
+      this.modalAdd = false;
+      this.item.cantidad = cantidad;
     },
     getCart() {
       if (process.client) {
@@ -149,45 +158,6 @@ export default {
           this.cart = cart;
         }
       }
-    },
-    addProduct() {
-      this.getCart();
-      let count = 0;
-      this.cart.forEach((element) => {
-        if (element.id == this.item.id) {
-          element.cantidad = this.cantidad;
-          count = count + 1;
-        }
-      });
-      if (count < 1) {
-        this.pushCart();
-      } else {
-        this.InsertLocalStorage();
-      }
-    },
-    pushCart() {
-      this.cart.push({
-        id: this.item.id,
-        descripcion: this.item.descripcion,
-        precio: this.item.precio_venta,
-        marca: this.item.marca,
-        img: this.url + this.item.url,
-        cantidad: this.cantidad,
-      });
-      this.InsertLocalStorage();
-    },
-    InsertLocalStorage() {
-      this.$bvToast.toast("agregado: " + this.cantidad, {
-        title: "Exito",
-        variant: "primary",
-        solid: true,
-      });
-      this.modal = false;
-      localStorage.setItem("cart", JSON.stringify(this.cart));
-      this.item.agregado = true;
-      this.item.cantidad = this.cantidad;
-      this.cantidad = null;
-      this.$nuxt.$emit("count-cantidad", null);
     },
   },
 };

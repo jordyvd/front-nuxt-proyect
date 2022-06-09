@@ -59,7 +59,7 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 .bg-system {
-  background-color: var(--main-color);
+  background-color: var(--main-color)!important;
 }
 
 .main_menu .cart i:after {

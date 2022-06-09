@@ -36,7 +36,7 @@
                     : ""
                 }}
               </h3>
-              <h2 class="color-system">S/. {{ product.precio_venta }}</h2>
+              <h2 class="color-system">${{ product.precio_venta }}</h2>
               <ul class="list">
                 <li>
                   <NuxtLink :to="'/search/' + product.marca" class="active">

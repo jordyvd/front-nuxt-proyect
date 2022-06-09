@@ -8,9 +8,9 @@
         <div class="row align-items-center justify-content-center">
           <div class="col-lg-11">
             <nav class="navbar navbar-expand-lg navbar-light">
-              <a class="navbar-brand text-logo-menu" to="/index">
+              <NuxtLink to="/" class="navbar-brand text-logo-menu">
                 Motortect
-              </a>
+              </NuxtLink>
               <button
                 class="navbar-toggler"
                 type="button"
@@ -45,17 +45,17 @@
                       Cliente
                     </a>
                     <div
-                      class="dropdown-menu"
+                      class="dropdown-menu bg-secondary"
                       aria-labelledby="navbarDropdown_1"
                     >
                       <a
-                        class="dropdown-item cursor text-white"
+                        class="dropdown-item cursor text-system bg-secondary"
                         @click="formLogin2(true)"
                       >
                         Iniciar sesion</a
                       >
                       <a
-                        class="dropdown-item cursor text-white"
+                        class="dropdown-item cursor text-system bg-secondary"
                         @click="formLogin2(false)"
                         >Registrate</a
                       >
@@ -75,16 +75,16 @@
                       productos
                     </a>
                     <div
-                      class="dropdown-menu"
+                      class="dropdown-menu bg-secondary"
                       aria-labelledby="navbarDropdown_2"
                     >
-                      <a class="dropdown-item" href="login.html">
+                      <a class="dropdown-item bg-secondary" href="login.html">
                         mis me gusta
                       </a>
-                      <a class="dropdown-item" href="tracking.html"
+                      <a class="dropdown-item bg-secondary" href="tracking.html"
                         >historial</a
                       >
-                      <NuxtLink to="/search" class="dropdown-item">
+                      <NuxtLink to="/search" class="dropdown-item bg-secondary">
                         todos
                       </NuxtLink>
                     </div>
@@ -116,7 +116,12 @@
         </div>
       </div>
       <transition name="fade">
-        <div class="search_input" style="border:1px solid white" id="search_input_box" v-if="formSearch">
+        <div
+          class="search_input"
+          style="border: 1px solid white"
+          id="search_input_box"
+          v-if="formSearch"
+        >
           <div class="container">
             <form
               class="d-flex justify-content-between search-inner"
@@ -170,7 +175,7 @@
           </div>
         </template>
         <div>
-          <div class="bg-secondary cart-sidebar border-top">
+          <div class="bg-secondary cart-sidebar border-t-white">
             <div
               v-for="(item, index) in cart"
               :key="index"
@@ -180,14 +185,14 @@
                 <div class="col-lg-3 bg-white flex-center">
                   <b-img
                     :src="item.img"
-                    style="object-fit: contain;"
+                    style="object-fit: contain"
                     :alt="item.descripcion"
                   />
                 </div>
                 <div class="col-lg-9">
                   <p style="font-size: 12px; line-height: 1.5">
                     {{ item.descripcion }} <br />
-                    {{ `S/.${item.precio}` }}
+                    {{ `$${item.precio}` }}
                   </p>
                   <b-form-spinbutton
                     style="margin-top: -6px"
@@ -201,8 +206,9 @@
           </div>
           <div class="container text-center my-2 bg-secondary p-2">
             <NuxtLink to="/cart" class="btn btn-primary"
-              ><i class="fa fa-credit-card"></i> IR A PAGAR S/.
-              {{ subTotal.toFixed(2) }}</NuxtLink
+              ><i class="fa fa-credit-card"></i> IR A PAGAR ${{
+                subTotal.toFixed(2)
+              }}</NuxtLink
             >
           </div>
           <div class="container text-center my-2 bg-secondary p-2">

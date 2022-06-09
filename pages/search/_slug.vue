@@ -166,7 +166,7 @@
                         <h5 class="text-center">{{ item.descripcion }}</h5>
                       </NuxtLink>
                       <p>${{ item.precio_venta }}</p>
-                      <b-badge variant="primary" v-if="item.agregado"
+                      <b-badge variant="primary" v-if="item.cantidad > 0"
                         ><i class="fas fa-check"></i> agregado({{
                           item.cantidad
                         }})</b-badge
@@ -190,26 +190,15 @@
         </div>
       </div>
     </section>
-    <b-modal v-model="modalAdd" centered hide-footer title="Cantidad">
-      <div class="form-row text-center">
-        <div class="col-12">
-          <form @submit.prevent="addProduct()">
-            <b-form-spinbutton
-              id="sb-inline"
-              v-model="cantidad"
-            ></b-form-spinbutton>
-
-            <button
-              type="submit"
-              class="btn btn-primary my-2"
-              :disabled="cantidad < 1"
-            >
-              <i class="fas fa-shopping-bag"></i> Agregar
-            </button>
-          </form>
-        </div>
-      </div>
-    </b-modal>
+    <modal-agregar
+      ref="modalAgregar"
+      :modal="modalAdd"
+      :cantidad="cantidad"
+      :item="item"
+      :key="key"
+      @agregar="agregar"
+      @closeModal="closeModal"
+    ></modal-agregar>
   </div>
 </template>
 <script>
@@ -240,17 +229,11 @@ export default {
       pagination: {
         count: 0,
       },
-      urlImg: process.env.BASE_URL+'/images/productos/',
+      urlImg: process.env.BASE_URL + "/images/productos/",
+      key:0,
     };
   },
   created() {
-    // if (process.client) {
-    //  localStorage.setItem(
-    //         "cart",
-    //         JSON.stringify([])
-    //       );
-    //        }
-
     this.spinnerMarca = true;
     this.getResult();
     this.getCart();
@@ -272,14 +255,10 @@ export default {
           this.result = res.data.products;
           this.marcas = res.data.marcas;
           this.pagination.cantidad = res.data.count;
-          console.log(res.data.products.cantidad);
           this.result.forEach((element) => {
             this.cart.forEach((cart) => {
               if (element.id == cart.id) {
-                element.agregado = true;
                 element.cantidad = cart.cantidad;
-              } else {
-                element.cantidad = 0;
               }
             });
           });
@@ -325,48 +304,13 @@ export default {
         });
     },
     modalCantidad(item) {
+      this.key = this.key+1;
       this.modalAdd = true;
       this.item = item;
       this.cantidad = item.cantidad;
     },
-    addProduct() {
-      this.getCart();
-      let count = 0;
-      this.cart.forEach((element) => {
-        if (element.id == this.item.id) {
-          element.cantidad = this.cantidad;
-          count = count + 1;
-        }
-      });
-      if (count < 1) {
-        //   this.pushCart();
-      } else {
-        this.InsertLocalStorage();
-      }
-    },
-    pushCart() {
-      this.cart.push({
-        id: this.item.id,
-        descripcion: this.item.descripcion,
-        precio: this.item.precio_venta,
-        marca: this.item.marca,
-        img: this.url + this.item.url,
-        cantidad: this.cantidad,
-      });
-      this.InsertLocalStorage();
-    },
-    InsertLocalStorage() {
-      this.$bvToast.toast("agregado: " + this.cantidad, {
-        title: "Exito",
-        variant: "primary",
-        solid: true,
-      });
+    closeModal() {
       this.modalAdd = false;
-      localStorage.setItem("cart", JSON.stringify(this.cart));
-      this.item.agregado = true;
-      this.item.cantidad = this.cantidad;
-      this.cantidad = null;
-      this.$nuxt.$emit("count-cantidad", null);
     },
     getCart() {
       if (process.client) {
@@ -377,6 +321,19 @@ export default {
           this.cart = cart;
         }
       }
+    },
+    agregar(cantidad, cart) {
+      this.modalAdd = false;
+      let count = 0;
+      cart.forEach((element) => {
+        if (element.id == this.item.id) {
+          element.cantidad = cantidad;
+          count = count + 1;
+        }
+      });
+      this.cantidad = cantidad;
+      this.modalAdd = false;
+      this.item.cantidad = cantidad;
     },
     selectMarca(item) {
       this.marca = item.marca;
