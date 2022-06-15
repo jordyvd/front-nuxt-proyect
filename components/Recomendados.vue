@@ -20,7 +20,7 @@
               </div>
               <div
                 class="col-lg-3 col-sm-6"
-                v-for="(item, index) in recomendados"
+                v-for="(item, index) in mergeProductAndAdded"
                 :key="index"
               >
                 <div class="single_category_product">
@@ -87,8 +87,7 @@ export default {
       cantidad: 0,
       recomendados: [],
       item: {},
-      cart: [],
-      key:0,
+      key: 0,
     };
   },
   created() {
@@ -97,37 +96,22 @@ export default {
   },
   methods: {
     getCart() {
-      if (process.client) {
-        let cart = JSON.parse(localStorage.getItem("cart"));
-        if (cart === null) {
-          this.cart = [];
-        } else {
-          this.cart = cart;
-          console.log("card", this.cart);
-        }
-      }
+      this.$store.commit("getCart");
     },
     getRecomendados() {
       axios
         .post(process.env.BASE_URL + "/api/products/get-recomendados")
         .then((res) => {
           this.recomendados = res.data;
-          this.recomendados.forEach((element) => {
-            this.cart.forEach((cart) => {
-              if (element.id == cart.id) {
-                element.cantidad = cart.cantidad;
-              }
-            });
-          });
         });
     },
     openModalCantidad(item) {
       this.item = item;
       this.cantidad = item.cantidad == null ? 0 : item.cantidad;
-      this.key = this.key+1;
+      this.key = this.key + 1;
       this.modalCantidad = true;
     },
-    closeModal(){
+    closeModal() {
       this.modalCantidad = false;
     },
     agregar(cantidad, cart) {
@@ -150,6 +134,20 @@ export default {
         variant: "success",
         solid: true,
       });
+    },
+  },
+  computed: {
+    mergeProductAndAdded() {
+      let array = [];
+      this.recomendados.forEach((element) => {
+        this.$store.state.cart.forEach((cart) => {
+          if (element.id == cart.id) {
+            element.cantidad = cart.cantidad;
+          }
+        });
+        array.push(element);
+      });
+      return array;
     },
   },
 };

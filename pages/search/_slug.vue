@@ -138,7 +138,7 @@
               <Skeleton v-if="loading" />
               <div
                 class="col-lg-4 col-sm-6"
-                v-for="(item, index) in result"
+                v-for="(item, index) in mergeResultAndAdded"
                 :key="index"
               >
                 <div class="single_category_product">
@@ -230,7 +230,7 @@ export default {
         count: 0,
       },
       urlImg: process.env.BASE_URL + "/images/productos/",
-      key:0,
+      key: 0,
     };
   },
   created() {
@@ -255,13 +255,6 @@ export default {
           this.result = res.data.products;
           this.marcas = res.data.marcas;
           this.pagination.cantidad = res.data.count;
-          this.result.forEach((element) => {
-            this.cart.forEach((cart) => {
-              if (element.id == cart.id) {
-                element.cantidad = cart.cantidad;
-              }
-            });
-          });
           if (this.result.length == this.pagination.cantidad) {
             this.btnMore = false;
           } else {
@@ -304,7 +297,7 @@ export default {
         });
     },
     modalCantidad(item) {
-      this.key = this.key+1;
+      this.key = this.key + 1;
       this.modalAdd = true;
       this.item = item;
       this.cantidad = item.cantidad;
@@ -376,6 +369,20 @@ export default {
           this.loading = false;
           this.spinnerMarca = false;
         });
+    },
+  },
+  computed: {
+    mergeResultAndAdded() {
+      let array = [];
+      this.result.forEach((element) => {
+        this.$store.state.cart.forEach((cart) => {
+          if (element.id == cart.id) {
+            element.cantidad = cart.cantidad;
+          }
+        });
+        array.push(element);
+      });
+      return array;
     },
   },
 };

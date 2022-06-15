@@ -42,48 +42,29 @@ export default {
   },
   methods: {
     agregar() {
-      this.getCart();
       this.pushCart();
-      console.log(this.cart)
-      this.InsertLocalStorage();
-      this.$nuxt.$emit("count-cantidad", null);
+      this.$nuxt.$emit("count-cantidad");
       this.$emit("agregar", this.cantidadAgregado, this.cart);
       this.$bvToast.toast("agregado: " + this.cantidadAgregado, {
         title: "Exito",
         variant: "primary",
         solid: true,
+        toaster: "b-toaster-bottom-right",
       });
-    },
-    getCart() {
-      if (process.client) {
-        let cart = JSON.parse(localStorage.getItem("cart"));
-        if (cart === null) {
-          this.cart = [];
-        } else {
-          this.cart = cart;
-        }
-      }
     },
     pushCart() {
       let existe = false;
-      this.cart.forEach((element) => {
+      this.$store.state.cart.forEach((element) => {
         if (element.id == this.item.id) {
           element.cantidad = this.cantidadAgregado;
           existe = true;
+          this.$store.commit("updateCantidad", element);
+          this.$store.commit("getCart");
         }
       });
-      if(existe) return;
-      this.cart.push({
-        id: this.item.id,
-        descripcion: this.item.descripcion,
-        precio: this.item.precio_venta,
-        marca: this.item.marca,
-        img: this.url + this.item.url,
-        cantidad: this.cantidadAgregado,
-      });
-    },
-    InsertLocalStorage() {
-      localStorage.setItem("cart", JSON.stringify(this.cart));
+      if (existe) return;
+      this.item.cantidad = this.cantidadAgregado;
+      this.$store.commit("pushCart", this.item);
     },
     closeModal() {
       this.$emit("closeModal");

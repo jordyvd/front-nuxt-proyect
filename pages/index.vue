@@ -107,7 +107,6 @@ export default {
     };
   },
   created() {
-    console.log("sa", process.env.config);
     // alert(process.env.API_MOTORTECT_BACK)
   },
   mounted() {

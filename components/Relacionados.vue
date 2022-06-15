@@ -29,7 +29,7 @@
               </div>
               <div
                 class="col-lg-3 col-sm-6"
-                v-for="(item, index) in result"
+                v-for="(item, index) in mergeRelacionadoAndAdded"
                 :key="index"
               >
                 <div class="single_category_product">
@@ -98,7 +98,7 @@ export default {
       cantidad: 0,
       loading: false,
       urlImg: process.env.BASE_URL + "/images/productos/",
-      key: 0
+      key: 0,
     };
   },
   created() {
@@ -112,7 +112,7 @@ export default {
       this.cantidad = item.cantidad;
       this.modalAdd = true;
     },
-    closeModal(){
+    closeModal() {
       this.modalAdd = false;
     },
     getRelacionados() {
@@ -125,13 +125,13 @@ export default {
           products.forEach((element) => {
             this.result.push(element);
           });
-          this.result.forEach((element) => {
-            this.cart.forEach((cart) => {
-              if (element.id == cart.id) {
-                element.cantidad = cart.cantidad;
-              }
-            });
-          });
+          // this.result.forEach((element) => {
+          //   this.cart.forEach((cart) => {
+          //     if (element.id == cart.id) {
+          //       element.cantidad = cart.cantidad;
+          //     }
+          //   });
+          // });
           this.loading = false;
         });
     },
@@ -158,6 +158,20 @@ export default {
           this.cart = cart;
         }
       }
+    },
+  },
+  computed: {
+    mergeRelacionadoAndAdded() {
+      let array = [];
+      this.result.forEach((element) => {
+        this.$store.state.cart.forEach((cart) => {
+          if (element.id == cart.id) {
+            element.cantidad = cart.cantidad;
+          }
+        });
+        array.push(element);
+      });
+      return array;
     },
   },
 };

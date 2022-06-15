@@ -3,17 +3,15 @@
     <div class="col-sm-12 main-section">
       <div class="modal-content bg-transparent">
         <div class="col-12 user-img">
-          <img
-            src="https://www.focusedu.org/wp-content/uploads/2018/12/circled-user-male-skin-type-1-2.png"
-          />
+          <img src="/images/key.png" />
         </div>
-        <form class="col-12" method="get">
+        <form class="col-12" method="get" @submit.prevent="registrar">
           <div class="form-group user" id="user-group">
             <input
               type="text"
               class="form-control"
               placeholder="Nombre de usuario"
-              name="username"
+              v-model="nombre"
             />
           </div>
           <div class="form-group user" id="dni">
@@ -21,7 +19,7 @@
               type="text"
               class="form-control"
               placeholder="Ruc o dni"
-              name="username"
+              v-model="ruc"
             />
           </div>
           <div class="form-group user" id="phone">
@@ -29,7 +27,7 @@
               type="text"
               class="form-control"
               placeholder="Teléfono"
-              name="username"
+              v-model="telefono"
             />
           </div>
           <div class="form-group user" id="email">
@@ -37,7 +35,7 @@
               type="text"
               class="form-control"
               placeholder="Correo"
-              name="username"
+              v-model="correo"
             />
           </div>
           <div class="form-group user" id="address">
@@ -45,7 +43,7 @@
               type="text"
               class="form-control"
               placeholder="Dirección"
-              name="username"
+              v-model="direccion"
             />
           </div>
           <div class="form-group con" id="contrasena-group">
@@ -53,23 +51,31 @@
               type="password"
               class="form-control"
               placeholder="Contraseña"
-              name="password"
+              v-model="contraseña"
             />
           </div>
-               <div class="form-group con" id="confirmar">
+          <div class="form-group con" id="confirmar">
             <input
               type="password"
               class="form-control"
               placeholder="Confirmar contraseña"
-              name="password"
+              v-model="confirmar"
             />
           </div>
-          <button type="submit" class="btn btn-primary">
+          <button
+            type="submit"
+            class="btn btn-primary"
+            :disabled="!validarCampos"
+            v-if="!spinner"
+          >
             <i class="fas fa-sign-in-alt"></i> Registrar
+          </button>
+          <button class="btn btn-primary" disabled v-else>
+            <b-spinner small></b-spinner>
           </button>
         </form>
         <div class="col-12 forgot">
-          <a href="#">Recordar contraseña?</a>
+          <a href="#" class="text-white">Recordar contraseña?</a>
         </div>
         <div class="col-12 forgot">
           <small class="text-primary" @click="loginForm()"
@@ -82,13 +88,70 @@
 </template>
 
 <script>
+import axios from "axios";
+import Swal from "sweetalert2/dist/sweetalert2.js";
 export default {
   data() {
-    return {};
+    return {
+      nombre: "",
+      ruc: "",
+      telefono: "",
+      correo: "",
+      direccion: "",
+      contraseña: "",
+      confirmar: "",
+      spinner: false,
+    };
   },
   methods: {
     loginForm() {
       this.$emit("click", false);
+    },
+    registrar() {
+      if (!this.validarCampos) return;
+      if (this.contraseña != this.confirmar) {
+        Swal.fire({
+          type: "error",
+          title: "Oops...",
+          text: "las contraseñas no coinciden",
+        });
+      }
+      this.spinner = true;
+      const params = {
+        name: this.nombre,
+        ruc: this.ruc,
+        telefono: this.telefono,
+        email: this.correo,
+        direccion: this.direccion,
+        password: this.contraseña,
+      };
+      axios
+        .post(process.env.BASE_URL + "/api/auth/register", params)
+        .then((res) => {
+          if (res.data == "existe") {
+            Swal.fire({
+              type: "info",
+              text: "Este cliente ya esta registrado",
+            });
+          }
+          this.spinner = false;
+        });
+    },
+  },
+  computed: {
+    validarCampos() {
+      if (
+        ["", null].includes(this.nombre.trim()) ||
+        ["", null].includes(this.ruc.trim()) ||
+        ["", null].includes(this.telefono.trim()) ||
+        ["", null].includes(this.correo.trim()) ||
+        ["", null].includes(this.direccion.trim()) ||
+        ["", null].includes(this.contraseña.trim()) ||
+        ["", null].includes(this.confirmar.trim())
+      ) {
+        return false;
+      }
+      return true;
     },
   },
 };
@@ -157,7 +220,6 @@ export default {
 .form-group#confirmar::before {
   content: "\f023" !important;
 }
-
 
 button {
   width: 60%;

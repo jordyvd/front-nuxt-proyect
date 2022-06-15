@@ -454,3 +454,10 @@ body{
   border: 1px solid var(--secondary-color)!important;
   border-radius: 4px!important;
 }
+.form-control{
+  background: rgba(0, 0, 0, 0.4)!important;
+  color: white!important;
+}
+.form-group{
+  color: white!important;
+}

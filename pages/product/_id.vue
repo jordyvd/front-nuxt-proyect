@@ -45,7 +45,10 @@
                   </NuxtLink>
                 </li>
                 <li>
-                  <NuxtLink :to="'/search/' + product.procedencia" class="active">
+                  <NuxtLink
+                    :to="'/search/' + product.procedencia"
+                    class="active"
+                  >
                     <span class="color-system">Procedencia</span> :
                     {{ product.procedencia }}
                   </NuxtLink>
@@ -132,7 +135,6 @@ export default {
     };
   },
   created() {
-    this.getCart();
     this.getDetails();
   },
   methods: {
@@ -146,7 +148,7 @@ export default {
         .then((res) => {
           this.product = res.data[0];
           this.update = ++this.update;
-          this.cart.forEach((cart) => {
+          this.$store.state.cart.forEach((cart) => {
             if (this.product.id == cart.id) {
               this.product.agregado = true;
               this.cantidad = cart.cantidad;
@@ -155,51 +157,40 @@ export default {
           this.skeleton = false;
         });
     },
-    getCart() {
-      if (process.client) {
-        let cart = JSON.parse(localStorage.getItem("cart"));
-        if (cart === null) {
-          this.cart = [];
-        } else {
-          this.cart = cart;
-        }
-      }
-    },
     addProduct() {
-      this.getCart();
-      let count = 0;
-      this.cart.forEach((element) => {
-        if (element.id == this.product.id) {
-          element.cantidad = this.cantidad;
-          count = count + 1;
-        }
-      });
-      if (count < 1) {
-        this.pushCart();
-      } else {
-        this.InsertLocalStorage();
-      }
-    },
-    pushCart() {
-      this.cart.push({
-        id: this.item.id,
-        descripcion: this.item.descripcion,
-        precio: this.item.precio_venta,
-        marca: this.item.marca,
-        img: this.url + this.item.url,
-        cantidad: this.cantidad,
-      });
-      this.InsertLocalStorage();
-    },
-    InsertLocalStorage() {
+      if (this.cantidad < 1) return;
+      this.pushCart();
+      this.$nuxt.$emit("count-cantidad");
       this.$bvToast.toast("agregado: " + this.cantidad, {
         title: "Exito",
         variant: "primary",
         solid: true,
+        toaster: "b-toaster-bottom-right",
       });
-      this.modalAdd = false;
-      localStorage.setItem("cart", JSON.stringify(this.cart));
-      this.$nuxt.$emit("count-cantidad", null);
+    },
+    pushCart() {
+      let existe = false;
+      this.$store.state.cart.forEach((element) => {
+        if (element.id == this.product.id) {
+          element.cantidad = this.cantidad;
+          existe = true;
+          this.$store.commit("updateCantidad", element);
+          this.$store.commit("getCart");
+        }
+      });
+      if (existe) return;
+      this.product.cantidad = this.cantidad;
+      this.$store.commit("pushCart", this.product);
+    },
+  },
+  watch: {
+    "$store.state.cart"(newVal) {
+      this.$store.state.cart.forEach((cart) => {
+        if (this.product.id == cart.id) {
+          this.product.agregado = true;
+          this.cantidad = cart.cantidad;
+        }
+      });
     },
   },
 };

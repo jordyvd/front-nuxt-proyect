@@ -3,16 +3,14 @@
     <div class="col-sm-12 main-section">
       <div class="modal-content bg-transparent">
         <div class="col-12 user-img">
-          <img
-            src="https://www.focusedu.org/wp-content/uploads/2018/12/circled-user-male-skin-type-1-2.png"
-          />
+          <img src="/images/key.png" />
         </div>
         <form class="col-12" @submit.prevent="ingresar">
-          <div class="form-group user" id="user-group">
+          <div class="form-group user" id="dni">
             <input
               type="text"
               class="form-control"
-              placeholder="Nombre de usuario"
+              placeholder="Ruc o DNI"
               v-model="ruc"
             />
           </div>
@@ -27,8 +25,11 @@
           id="input-1-live-feedback"
         >This is a required field and must be at least 3 characters.</b-form-invalid-feedback> -->
           </div>
-          <button type="submit" class="btn btn-primary">
+          <button type="submit" class="btn btn-primary" v-if="!spinner">
             <i class="fas fa-sign-in-alt"></i> Ingresar
+          </button>
+          <button class="btn btn-primary" disabled v-else>
+            <b-spinner small></b-spinner>
           </button>
         </form>
         <div class="col-12 forgot">
@@ -46,19 +47,18 @@
 <script>
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import axios from "axios";
-import FunctionG from './Function';
+import FunctionG from "./Function";
 export default {
-  mixins:[FunctionG],
+  mixins: [FunctionG],
   data() {
     return {
-      ruc: "8887778887",
-      password: "12345678955a",
-      user:{},
+      ruc: "",
+      password: "",
+      user: {},
+      spinner: false,
     };
   },
-  created(){
-
-  },
+  created() {},
   methods: {
     registrate() {
       this.$emit("click", false);
@@ -77,17 +77,19 @@ export default {
           text: "la contraseña es requerida",
         });
       } else {
+        this.spinner = true;
         const params = { ruc: this.ruc, password: this.password };
         axios
           .post(process.env.BASE_URL + "/api/auth/login", params)
           .then((res) => {
             if (res.data.success) {
-              this.$bvToast.toast("Bienvenido(a) "+res.data.usuario.name, {
+              this.$bvToast.toast("Bienvenido(a) " + res.data.usuario.name, {
                 title: "Perfecto!",
                 variant: "primary",
                 solid: true,
               });
-              this.saveLogin(res.data.usuario);
+              this.$store.commit("userLogNuevo", res.data.usuario);
+              this.spinner = false;
             }
           })
           .catch((error) => {
@@ -131,7 +133,7 @@ export default {
 
 .form-group input {
   height: 42px;
-  font-size: 18px;
+  font-size: 15px;
   border: 0;
   padding-left: 54px;
   border-radius: 5px;
@@ -146,8 +148,8 @@ export default {
   font-weight: 900;
 }
 
-.form-group#user-group::before {
-  content: "\f007" !important;
+.form-group#dni::before {
+  content: "\f2c2" !important;
 }
 
 .form-group#contrasena-group::before {
@@ -164,7 +166,7 @@ button {
 }
 
 .forgot a {
-  color: #343a40;
+  color: white;
 }
 small {
   transition: 0.5s;

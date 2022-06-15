@@ -8,14 +8,14 @@
             <table class="table">
               <thead>
                 <tr>
-                  <th scope="col">Producto</th>
-                  <th scope="col">Precio</th>
-                  <th scope="col">Cantidad</th>
-                  <th scope="col">Total</th>
+                  <th scope="col" class="color-system">Producto</th>
+                  <th scope="col" class="color-system">Precio</th>
+                  <th scope="col" class="color-system">Cantidad</th>
+                  <th scope="col" class="color-system">Total</th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(item, index) in cart" :key="index">
+                <tr v-for="(item, index) in $store.state.cart" :key="index">
                   <td>
                     <div class="media">
                       <div class="d-flex">
@@ -27,7 +27,7 @@
                     </div>
                   </td>
                   <td>
-                    <h5>${{ item.precio }}</h5>
+                    <h5 class="color-system">${{ item.precio }}</h5>
                   </td>
                   <td>
                     <!-- <div class="product_count">
@@ -59,20 +59,20 @@
                     ></b-form-spinbutton>
                   </td>
                   <td>
-                    <h5>${{ item.precio * item.cantidad }}</h5>
+                    <h5 class="color-system">${{ item.precio * item.cantidad }}</h5>
                   </td>
                 </tr>
                 <tr>
                   <td></td>
                   <td></td>
                   <td>
-                    <h5>Subtotal</h5>
+                    <h5 class="color-system">Total</h5>
                   </td>
                   <td>
-                    <h5>$ {{ subTotal }}</h5>
+                    <h5 class="color-system">$ {{ subTotal }}</h5>
                   </td>
                 </tr>
-                <tr class="shipping_area">
+                <!-- <tr class="shipping_area">
                   <td></td>
                   <td></td>
                   <td>
@@ -108,7 +108,7 @@
                   <td>
                     <h5>$ {{ subTotal }}</h5>
                   </td>
-                </tr>
+                </tr> -->
               </tbody>
             </table>
             <div class="checkout_btn_inner float-right my-3">
@@ -128,23 +128,9 @@ export default {
     return {
       img: "https://www.tiendamotorista.com/65914-large_default/copy-of-amortiguador-trasero-moto-honda-crf-250-l-2017-2019-yss-top-line-gas-z-60501899.jpg",
       cantidad: 0,
-      cart: [],
     };
   },
-  created() {
-    this.getCart();
-  },
   methods: {
-    getCart() {
-      if (process.client) {
-        let cart = JSON.parse(localStorage.getItem("cart"));
-        if (cart === null) {
-          this.cart = [];
-        } else {
-          this.cart = cart;
-        }
-      }
-    },
     cantidadCalculate(item, operador) {
       if (item.cantidad >= 1) {
         if (operador == "+") {
@@ -160,7 +146,7 @@ export default {
   },
   computed: {
     subTotal() {
-      return this.cart.reduce((total, item) => {
+      return this.$store.state.cart.reduce((total, item) => {
         return total + item.precio * item.cantidad;
       }, 0);
     },

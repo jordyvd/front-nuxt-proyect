@@ -89,11 +89,11 @@
                       </NuxtLink>
                     </div>
                   </li>
-                  <li class="nav-item">
+                  <!-- <li class="nav-item">
                     <NuxtLink to="/cart" class="nav-link" :class="colorText">
                       compra
                     </NuxtLink>
-                  </li>
+                  </li> -->
                 </ul>
               </div>
               <div class="hearer_icon d-flex">
@@ -167,7 +167,7 @@
               </b-col>
               <b-col cols="2">
                 <i
-                  class="fas fa-times-circle cursor"
+                  class="fas fa-times-circle cursor text-white"
                   @click="modalBolso = false"
                 ></i>
               </b-col>
@@ -177,7 +177,7 @@
         <div>
           <div class="bg-secondary cart-sidebar border-t-white">
             <div
-              v-for="(item, index) in cart"
+              v-for="(item, index) in $store.state.cart"
               :key="index"
               class="border-bottom"
             >
@@ -199,6 +199,7 @@
                     id="sb-inline"
                     v-model="item.cantidad"
                     inline
+                    @change="updateCantidad(item)"
                   ></b-form-spinbutton>
                 </div>
               </div>
@@ -225,7 +226,33 @@
         </div>
       </b-sidebar>
       <!-- ***************** LOGIN ****************** -->
-      <b-sidebar v-model="formUser" backdrop right shadow>
+      <b-sidebar
+        v-model="formUser"
+        backdrop
+        left
+        shadow
+        header-class="p-0 bg-secondary"
+        body-class="overflox-x-hidden bg-secondary"
+      >
+        <template #header>
+          <div class="bg-secondary w-100 mb-2">
+            <b-row>
+              <b-col cols="10">
+                <p
+                  class="text-bold"
+                  style="font-size: 14px; margin: 5px"
+                  v-text="login ? 'INICIAR SESION' : 'REGISTRATE'"
+                ></p>
+              </b-col>
+              <b-col cols="2">
+                <i
+                  class="fas fa-times-circle cursor text-white"
+                  @click="formUser = false"
+                ></i>
+              </b-col>
+            </b-row>
+          </div>
+        </template>
         <Login @click="formLogin()" v-if="login" />
         <Registrar @click="formLogin()" v-else />
       </b-sidebar>
@@ -251,7 +278,6 @@ export default {
       modalBolso: false,
       formUser: false,
       login: true,
-      cart: [],
       busqueda: null,
       img: "https://siempreauto.com/wp-content/uploads/sites/9/2021/08/damper-2118130_1280.jpg?quality=60&strip=all&w=1200",
       cantidad: 0,
@@ -260,6 +286,7 @@ export default {
     };
   },
   created() {
+    this.$store.commit("getCart");
     this.cantidadCart();
     this.$nuxt.$on("count-cantidad", this.cantidadCart);
     axios.post(this.url + "/api/auth/is-logout").then((res) => {
@@ -269,12 +296,12 @@ export default {
   methods: {
     isLogout() {
       if (process.client) {
-        let cart = JSON.parse(localStorage.getItem("cart"));
-        if (cart === null) {
-          this.cart = [];
-        } else {
-          this.cart = cart;
-        }
+        // let cart = JSON.parse(localStorage.getItem("cart"));
+        // if (cart === null) {
+        //   this.cart = [];
+        // } else {
+        //   this.cart = cart;
+        // }
       }
     },
     formLogin() {
@@ -283,16 +310,6 @@ export default {
     formLogin2(boolean) {
       this.formUser = true;
       this.login = boolean;
-    },
-    getCart() {
-      if (process.client) {
-        let cart = JSON.parse(localStorage.getItem("cart"));
-        if (cart === null) {
-          this.cart = [];
-        } else {
-          this.cart = cart;
-        }
-      }
     },
     createClass(name, rules) {
       if (process.client) {
@@ -305,14 +322,14 @@ export default {
       }
     },
     showBolso() {
-      this.getCart();
-      if (this.cart.length > 0) {
+      if (this.$store.state.cantidad > 0) {
         this.modalBolso = true;
       } else {
         this.$bvToast.toast("no hay products agregados", {
           title: "Bolsa vacia",
           variant: "warning",
           solid: true,
+          toaster: "b-toaster-bottom-right",
         });
       }
     },
@@ -320,11 +337,9 @@ export default {
       this.$router.push("/search/" + this.busqueda);
     },
     cantidadCart() {
-      this.getCart();
-      this.cantidad = this.countCart;
       let styles =
         'position: absolute;border-radius: 50%;background-color: #2f7dfc;width: 15px;height: 15px;right: -8px;top: -8px;content: "' +
-        this.cantidad +
+        parseInt(this.$store.state.cantidad) +
         '";text-align: center;line-height: 15px;font-size: 10px;color: #fff;';
       this.createClass(".main_menu .cart i:after", styles);
     },
@@ -354,6 +369,11 @@ export default {
         }
       });
     },
+    updateCantidad(item) {
+      this.$store.commit("updateCantidad", item);
+      this.$store.commit("getCart");
+      this.$nuxt.$emit("count-cantidad");
+    },
   },
   mounted: function () {
     window.addEventListener("scroll", this.scrollListener);
@@ -363,13 +383,8 @@ export default {
   },
   computed: {
     subTotal() {
-      return this.cart.reduce((total, item) => {
+      return this.$store.state.cart.reduce((total, item) => {
         return total + item.precio * item.cantidad;
-      }, 0);
-    },
-    countCart() {
-      return this.cart.reduce((cantidad, item) => {
-        return parseInt(cantidad) + parseInt(item.cantidad);
       }, 0);
     },
     colorText() {

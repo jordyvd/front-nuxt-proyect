@@ -12,18 +12,9 @@ module.exports = {
     },
   },
   methods: {
-    saveLogin(usuario) {
-      console.log(usuario);
-      if (process.client) {
-        let usuarioLocal = JSON.parse(localStorage.getItem("usuario"));
-        if (usuarioLocal === null) {
-          this.usuarioLocal = [];
-        } else {
-          this.usuario = usuario;
-        }
-         localStorage.setItem("user", JSON.stringify(usuario));
-      }
-    },
+     agregarFavoritos(item){
+        axios.post('')
+     }
   },
 };
 </script>
