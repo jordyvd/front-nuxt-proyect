@@ -206,7 +206,7 @@
             </div>
           </div>
           <div class="container text-center my-2 bg-secondary p-2">
-            <NuxtLink to="/cart" class="btn btn-primary"
+            <NuxtLink to="/pagar" class="btn btn-primary"
               ><i class="fa fa-credit-card"></i> IR A PAGAR ${{
                 subTotal.toFixed(2)
               }}</NuxtLink
@@ -287,6 +287,7 @@ export default {
   },
   created() {
     this.$store.commit("getCart");
+    this.$store.commit("setUserLocalStorage");
     this.cantidadCart();
     this.$nuxt.$on("count-cantidad", this.cantidadCart);
     axios.post(this.url + "/api/auth/is-logout").then((res) => {

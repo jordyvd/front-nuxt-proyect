@@ -150,7 +150,11 @@
                     <div class="category_social_icon">
                       <ul>
                         <li>
-                          <a href="#"><i class="fas fa-heart"></i></a>
+                          <a
+                            class="text-white cursor"
+                            @click="agregarFavoritos(item)"
+                            ><i class="fas fa-heart"></i
+                          ></a>
                         </li>
                         <li>
                           <a
@@ -203,9 +207,10 @@
 </template>
 <script>
 import axios from "axios";
-import Skeleton from "~/components/Skeleton.vue";
 import Loading from "~/components/Loading.vue";
+import Functions from "../../components/Function";
 export default {
+  mixins: [Functions],
   components: { Loading },
   data() {
     return {
@@ -236,7 +241,6 @@ export default {
   created() {
     this.spinnerMarca = true;
     this.getResult();
-    this.getCart();
   },
   methods: {
     getResult() {
@@ -276,18 +280,19 @@ export default {
       axios
         .post(process.env.BASE_URL + "/api/products/get-more-search", params)
         .then((res) => {
-          let products = res.data.products;
-          products.forEach((element) => {
-            this.result.push(element);
-          });
-          this.result.forEach((element) => {
-            this.cart.forEach((cart) => {
-              if (element.id == cart.id) {
-                element.agregado = true;
-                element.cantidad = cart.cantidad;
-              }
-            });
-          });
+          this.result = res.data.products;
+          // let products = res.data.products;
+          // products.forEach((element) => {
+          //   this.result.push(element);
+          // });
+          // this.result.forEach((element) => {
+          //   this.cart.forEach((cart) => {
+          //     if (element.id == cart.id) {
+          //       element.agregado = true;
+          //       element.cantidad = cart.cantidad;
+          //     }
+          //   });
+          // });
           if (this.result.length == this.pagination.cantidad) {
             this.btnMore = false;
           } else {
@@ -305,14 +310,30 @@ export default {
     closeModal() {
       this.modalAdd = false;
     },
-    getCart() {
-      if (process.client) {
-        let cart = JSON.parse(localStorage.getItem("cart"));
-        if (cart === null) {
-          this.cart = [];
-        } else {
-          this.cart = cart;
-        }
+    agregarFavoritos(item) {
+      if (this.$store.state.user == null) {
+        this.$bvToast.toast("es necesario iniciar sesión", {
+          title: "Error",
+          variant: "warning",
+          solid: true,
+        });
+      } else {
+        this.loading = true;
+        const params = {
+          id: item.id,
+          ruc: this.$store.state.user.ruc,
+        };
+        axios
+          .post(process.env.BASE_URL + "/api/products/agregar-favorito", params)
+          .then((res) => {
+            this.$bvToast.toast("producto agregado", {
+              title: "Gracias!",
+              variant: "primary",
+              solid: true,
+              toaster: "b-toaster-bottom-right",
+            });
+            this.loading = false;
+          });
       }
     },
     agregar(cantidad, cart) {

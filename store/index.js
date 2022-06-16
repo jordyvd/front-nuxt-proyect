@@ -47,6 +47,16 @@ const createStore = () => {
       userLogNuevo(state, item) {
         state.userLog = item;
         localStorage.setItem("user", JSON.stringify(item));
+      },
+      setUserLocalStorage(state) {
+        if (process.client) {
+          let user = JSON.parse(localStorage.getItem("user"));
+          if (user == null) {
+            state.user = null;
+          } else {
+            state.user = user;
+          }
+        }
       }
     }
   })

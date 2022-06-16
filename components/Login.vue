@@ -99,6 +99,8 @@ export default {
               text: "los datos ingresados son incorrectos",
               footer: '<a href="">Why do I have this issue?</a>',
             });
+
+            this.spinner = false;
           });
       }
     },

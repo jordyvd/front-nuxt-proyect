@@ -3,7 +3,7 @@ module.exports = {
   data() {
     return {
       permiso: [],
-      usuario:[],
+      usuario: [],
     };
   },
   computed: {
@@ -12,9 +12,7 @@ module.exports = {
     },
   },
   methods: {
-     agregarFavoritos(item){
-        axios.post('')
-     }
+
   },
 };
 </script>
