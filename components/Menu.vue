@@ -335,7 +335,7 @@ export default {
       }
     },
     search() {
-      this.$router.push("/search/" + this.busqueda);
+      this.$router.push("/search?s=" + this.busqueda);
     },
     cantidadCart() {
       let styles =

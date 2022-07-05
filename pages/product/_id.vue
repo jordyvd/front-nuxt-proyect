@@ -39,14 +39,14 @@
               <h2 class="color-system">${{ product.precio_venta }}</h2>
               <ul class="list">
                 <li>
-                  <NuxtLink :to="'/search/' + product.marca" class="active">
+                  <NuxtLink :to="'/search?s=' + product.marca" class="active">
                     <span class="color-system">Marca</span> :
                     {{ product.marca }}
                   </NuxtLink>
                 </li>
                 <li>
                   <NuxtLink
-                    :to="'/search/' + product.procedencia"
+                    :to="'/search?s=' + product.procedencia"
                     class="active"
                   >
                     <span class="color-system">Procedencia</span> :
@@ -63,7 +63,7 @@
                     <span>Código</span> : {{ product.codigo }}</a
                   >
                 </li>
-                <li>
+                <!-- <li>
                   <a
                     class="color-system"
                     :class="
@@ -80,7 +80,7 @@
                         : "sin código"
                     }}</a
                   >
-                </li>
+                </li> -->
               </ul>
               <p>
                 {{ product.descripcion }}
