@@ -33,7 +33,7 @@
                       class="img-carta bg-transparent border-system"
                     />
                     <div class="category_product_text">
-                      <NuxtLink :to="'/search/' + item.nombre">
+                      <NuxtLink :to="'/search?s=' + item.nombre">
                         <h5 class="text-center text-uppercase">
                           {{ item.nombre }}
                         </h5>

@@ -55,7 +55,7 @@
                       </ul>
                     </div>
                     <div class="category_product_text">
-                      <NuxtLink :to="'/product/' + item.id">
+                      <NuxtLink :to="'/product?s=' + item.id">
                         <h5>{{ item.descripcion }}</h5>
                       </NuxtLink>
                       <p>${{ item.precio_venta }}</p>
