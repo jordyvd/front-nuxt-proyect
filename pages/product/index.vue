@@ -132,6 +132,7 @@ export default {
       skeleton: true,
       cart: [],
       urlImg: process.env.BASE_URL + "/images/productos/",
+      idp: this.$route.query.s,
     };
   },
   created() {
@@ -141,7 +142,7 @@ export default {
     getDetails() {
       this.skeleton = true;
       const params = {
-        id: this.$route.query,
+        id: this.idp,
       };
       axios
         .post(process.env.BASE_URL + "/api/products/details", params)
@@ -191,6 +192,10 @@ export default {
           this.cantidad = cart.cantidad;
         }
       });
+    },
+    $route() {
+      this.idp = this.$route.query.s;
+      this.getDetails();
     },
   },
 };

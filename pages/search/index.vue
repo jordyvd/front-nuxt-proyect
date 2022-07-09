@@ -97,7 +97,7 @@
                 >
                   <div class="single_product_menu product_bar_item d-flex">
                     <span class="text-search color-system border-b-text">{{
-                      $route.params.slug
+                      search
                     }}</span>
                   </div>
                   <!-- **** sin resultados **** -->
@@ -224,7 +224,7 @@ export default {
       marca_id: null,
       range: 0,
       filterRange: false,
-      search: this.$route.query,
+      search: this.$route.query.s,
       loading: false,
       page: 1,
       loadingMore: false,
@@ -280,11 +280,11 @@ export default {
       axios
         .post(process.env.BASE_URL + "/api/products/get-more-search", params)
         .then((res) => {
-          this.result = res.data.products;
-          // let products = res.data.products;
-          // products.forEach((element) => {
-          //   this.result.push(element);
-          // });
+          //this.result.push(res.data.products);
+          let products = res.data.products;
+          products.forEach((element) => {
+            this.result.push(element);
+          });
           // this.result.forEach((element) => {
           //   this.cart.forEach((cart) => {
           //     if (element.id == cart.id) {
@@ -404,6 +404,12 @@ export default {
         array.push(element);
       });
       return array;
+    },
+  },
+  watch: {
+    $route() {
+      this.search = this.$route.query.s;
+      this.getResult();
     },
   },
 };

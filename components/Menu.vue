@@ -281,7 +281,7 @@ export default {
       busqueda: null,
       img: "https://siempreauto.com/wp-content/uploads/sites/9/2021/08/damper-2118130_1280.jpg?quality=60&strip=all&w=1200",
       cantidad: 0,
-      scroll: false
+      scroll: false,
     };
   },
   created() {
@@ -289,7 +289,7 @@ export default {
     this.$store.commit("setUserLocalStorage");
     this.cantidadCart();
     this.$nuxt.$on("count-cantidad", this.cantidadCart);
-    axios.post(process.env.BASE_URL + + "/api/auth/is-logout").then((res) => {
+    axios.post(process.env.BASE_URL + +"/api/auth/is-logout").then((res) => {
       console.log(res.data);
     });
   },
@@ -334,6 +334,7 @@ export default {
       }
     },
     search() {
+      console.log(this.$router);
       this.$router.push("/search?s=" + this.busqueda);
     },
     cantidadCart() {
@@ -389,6 +390,11 @@ export default {
     },
     colorText() {
       return this.scroll || this.home == false ? "text-white" : "text-white";
+    },
+  },
+  watch: {
+    $route() {
+      this.formSearch = false;
     },
   },
 };
