@@ -57,6 +57,11 @@ const createStore = () => {
             state.user = user;
           }
         }
+      },
+      clearCart(state){
+        state.cart = [];
+        state.cantidad = 0;
+        localStorage.setItem("cart", JSON.stringify(state.cart));
       }
     }
   })

@@ -518,6 +518,10 @@ body {
   color: white !important;
 }
 
+.input-search{
+  background: transparent!important;
+}
+
 .form-group {
   color: white !important;
 }

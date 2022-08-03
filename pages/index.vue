@@ -24,7 +24,7 @@
           <div class="col-lg-3 col-sm-6">
             <div class="single_shopping_details">
               <i class="fas fa-headset"></i>
-              <h4>LLAMADA</h4>
+              <h4>CONTACTO</h4>
               <p>Detalle del servicio</p>
             </div>
           </div>

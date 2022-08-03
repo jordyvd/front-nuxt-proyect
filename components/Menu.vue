@@ -9,7 +9,7 @@
           <div class="col-lg-11">
             <nav class="navbar navbar-expand-lg navbar-light">
               <NuxtLink to="/" class="navbar-brand text-logo-menu">
-                Motortect
+                Motortec
               </NuxtLink>
               <button
                 class="navbar-toggler"
@@ -47,6 +47,7 @@
                     <div
                       class="dropdown-menu bg-secondary"
                       aria-labelledby="navbarDropdown_1"
+                      v-if="$store.state.user == null"
                     >
                       <a
                         class="dropdown-item cursor text-system bg-secondary"
@@ -58,6 +59,17 @@
                         class="dropdown-item cursor text-system bg-secondary"
                         @click="formLogin2(false)"
                         >Registrate</a
+                      >
+                    </div>
+                    <div
+                      class="dropdown-menu bg-secondary"
+                      aria-labelledby="navbarDropdown_1"
+                      v-else
+                    >
+                      <a
+                        class="dropdown-item cursor text-system bg-secondary"
+                      >
+                        Cerrar sesion</a
                       >
                     </div>
                   </li>
@@ -78,12 +90,12 @@
                       class="dropdown-menu bg-secondary"
                       aria-labelledby="navbarDropdown_2"
                     >
-                      <a class="dropdown-item bg-secondary" href="login.html">
-                        mis me gusta
-                      </a>
-                      <a class="dropdown-item bg-secondary" href="tracking.html"
-                        >historial</a
-                      >
+                      <!-- <NuxtLink to="/likes" class="dropdown-item bg-secondary">
+                        Mis me gusta
+                      </NuxtLink> -->
+                      <NuxtLink to="/record" class="dropdown-item bg-secondary"> 
+                        historial
+                      </NuxtLink>
                       <NuxtLink to="/search" class="dropdown-item bg-secondary">
                         todos
                       </NuxtLink>
@@ -129,7 +141,7 @@
             >
               <input
                 type="text"
-                class="form-control"
+                class="form-control input-search"
                 id="search_input"
                 placeholder="Buscar"
                 autocomplete="off"
