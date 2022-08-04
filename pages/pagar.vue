@@ -199,11 +199,12 @@ export default {
       if (process.client) {
         let historial = JSON.parse(localStorage.getItem("record"));
         let array = [];
-        if (historial != null) {
-          this.$store.state.cart.forEach((element) => {
+        console.log(historial.length > 0, "historial");
+        if (historial.length > 0) {
+          historial.forEach((element) => {
             element.cantidad = 0;
-            historial.forEach((elementH) => {
-              if (element.id != elementH.id) {
+            this.$store.state.cart.forEach((cart) => {
+              if (element.id != cart.id) {
                 array.push(element);
               }
             });
