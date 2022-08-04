@@ -77,7 +77,6 @@
                     <a
                       class="nav-link dropdown-toggle"
                       :class="colorText"
-                      href="blog.html"
                       id="navbarDropdown_3"
                       role="button"
                       data-toggle="dropdown"

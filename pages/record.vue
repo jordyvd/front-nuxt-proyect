@@ -41,7 +41,7 @@
                       {{ item.marca }}
                     </b-badge>
                     <div class="single_category_img">
-                      <img :src="urlImg + item.url" class="img-carta" />
+                      <img :src="item.img" class="img-carta" />
                       <div class="category_social_icon">
                         <ul>
                           <li>
