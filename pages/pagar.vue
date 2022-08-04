@@ -166,6 +166,7 @@ export default {
         });
         return;
       }
+      this.loading = true;
       const params = {
         productos: this.$store.state.cart,
         ruc_dni: this.cliente.ruc_dni,
@@ -190,6 +191,7 @@ export default {
             this.compra.send = false;
             this.$store.commit("clearCart");
             this.$refs.menuRef.cantidadCart();
+            this.loading = false;
           }
         });
     },
